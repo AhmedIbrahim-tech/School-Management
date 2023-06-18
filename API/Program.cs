@@ -1,5 +1,6 @@
-using Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
+
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,12 @@ builder.Services.AddDbContext<ApplicationDBContext>(option =>
     option.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"),
             b => b.MigrationsAssembly(typeof(ApplicationDBContext).Assembly.FullName)));
+
+#endregion
+
+#region Dependency Injection
+
+builder.Services.AddInfrastructureDependencies().AddServicesDependencies();
 
 #endregion
 

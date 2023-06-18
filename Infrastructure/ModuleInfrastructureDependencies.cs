@@ -1,6 +1,12 @@
-﻿namespace Infrastructure;
+﻿using Microsoft.Extensions.Configuration;
 
-public class ModuleInfrastructureDependencies
+namespace Infrastructure;
+
+public static class ModuleInfrastructureDependencies
 {
-
+    public static IServiceCollection AddInfrastructureDependencies(this IServiceCollection services)
+    {
+        services.AddTransient<IStudentRepository, StudentRepository>();
+        return services;
+    }
 }

@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Services
-{
-    internal class GlobingUsing
-    {
-    }
-}
+﻿global using Data.Entities;
+global using Data.Interface.IServices;
+global using Infrastructure.Data;
+global using Data.Interface.IRepository;
