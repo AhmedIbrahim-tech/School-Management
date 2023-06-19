@@ -1,4 +1,6 @@
-﻿namespace Infrastructure;
+﻿using Infrastructure.Interface;
+
+namespace Infrastructure;
 
 public static class ModuleInfrastructureDependencies
 {

@@ -1,5 +1,9 @@
 ﻿
 
+
+
+using Microsoft.EntityFrameworkCore;
+
 namespace Services.Services;
 
 public class StudentServices : IStudentServices
@@ -15,6 +19,15 @@ public class StudentServices : IStudentServices
     public StudentServices(IStudentRepository studentRepository)
     {
         _studentRepository = studentRepository;
+    }
+
+    public async Task<Student> GetStudentsByIdAsync(int id)
+    {
+        var result = await _studentRepository.GetTableNoTracking()
+                                       .Include(x=>x.Department)
+                                       .Where(x=>x.StudID.Equals(id))
+                                       .FirstOrDefaultAsync();
+        return result;
     }
 
     #endregion

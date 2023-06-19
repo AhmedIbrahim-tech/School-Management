@@ -1,4 +1,6 @@
-﻿namespace Infrastructure.Repository;
+﻿using Infrastructure.Interface;
+
+namespace Infrastructure.Repository;
 
 public class StudentRepository : GenericRepositoryAsync<Student>, IStudentRepository
 {

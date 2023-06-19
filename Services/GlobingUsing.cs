@@ -1,4 +1,4 @@
 ﻿global using Data.Entities;
-global using Infrastructure.Interface.IServices;
-global using Infrastructure.Interface.IRepository;
+global using Services.Interface.IServices;
+global using Infrastructure.Interface;
 

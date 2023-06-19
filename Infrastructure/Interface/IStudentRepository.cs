@@ -1,5 +1,4 @@
-﻿
-namespace Infrastructure.Interface.IRepository;
+﻿namespace Infrastructure.Interface;
 
 public interface IStudentRepository : IGenericRepositoryAsync<Student>
 {
