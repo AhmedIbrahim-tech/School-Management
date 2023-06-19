@@ -1,23 +1,8 @@
-﻿
-using Core.Features.Students.Commands.Models;
-
-namespace API.Controllers
+﻿namespace API.Controllers
 {
     [ApiController]
-    public class StudentController : ControllerBase
+    public class StudentController : GernericBaseController
     {
-
-        #region Fields
-        private readonly IMediator _mediator;
-        #endregion
-
-        #region Contractor
-        public StudentController(IMediator mediator)
-        {
-            this._mediator = mediator;
-        }
-        #endregion
-
         #region Handler Function
 
         #region Search
@@ -35,7 +20,7 @@ namespace API.Controllers
         {
             //var response = await _mediator.Send(new GetSingleStudentQuery() { Id = id});
             var response = await _mediator.Send(new GetSingleStudentQuery(id));
-            return Ok(response);
+            return ActionResult(response);
         }
         #endregion
 
@@ -44,7 +29,7 @@ namespace API.Controllers
         public async Task<IActionResult> Create([FromBody] AddStudentCommand dto)
         {
             var response = await _mediator.Send(dto);
-            return Ok(response);
+            return ActionResult(response);
         }
         #endregion
 
