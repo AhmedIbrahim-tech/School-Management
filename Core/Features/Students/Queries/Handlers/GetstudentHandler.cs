@@ -1,6 +1,6 @@
 ﻿namespace Core.Features.Students.Queries.Handlers;
 
-public class GetstudentHandler : IRequestHandler<GetStudentListQuery, List<GetStudentListResponse>>
+public class GetstudentHandler : GenericBaseResponseHandler , IRequestHandler<GetStudentListQuery, GenericBaseResponse<List<GetStudentListResponse>>>
 {
     #region Fileds
     private readonly IStudentServices _studentServices;
@@ -16,11 +16,11 @@ public class GetstudentHandler : IRequestHandler<GetStudentListQuery, List<GetSt
     #endregion
 
     #region Handler Function
-    public async Task<List<GetStudentListResponse>> Handle(GetStudentListQuery request, CancellationToken cancellationToken)
+    public async Task<GenericBaseResponse<List<GetStudentListResponse>>> Handle(GetStudentListQuery request, CancellationToken cancellationToken)
     {
         var response = await _studentServices.GetStudentsListAsync();
         var MapperObj = _mapper.Map<List<GetStudentListResponse>>(response);
-        return MapperObj;
+        return Success(MapperObj);
     }
     #endregion
 }

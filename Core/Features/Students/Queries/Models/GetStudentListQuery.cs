@@ -1,6 +1,5 @@
 ﻿namespace Core.Features.Students.Queries.Models;
 
-public class GetStudentListQuery : IRequest<List<GetStudentListResponse>>
+public class GetStudentListQuery : IRequest<GenericBaseResponse<List<GetStudentListResponse>>>
 {
-
 }

@@ -4,3 +4,4 @@ global using Data.Interface.IServices;
 global using MediatR;
 global using AutoMapper;
 global using Core.Features.Students.Queries.Results;
+global using Core.BaseResponse;
