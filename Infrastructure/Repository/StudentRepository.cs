@@ -1,18 +1,18 @@
 ﻿namespace Infrastructure.Repository;
 
-public class StudentRepository : IStudentRepository
+public class StudentRepository : GenericRepositoryAsync<Student>, IStudentRepository
 {
     #region Fields
 
-    private readonly ApplicationDBContext _dBContext;
+    private readonly DbSet<Student> _dBContext;
 
     #endregion
 
     #region Constructor
 
-    public StudentRepository(ApplicationDBContext dBContext)
+    public StudentRepository(ApplicationDBContext dBContext) : base(dBContext)
     {
-        _dBContext = dBContext;
+        _dBContext = dBContext.Set<Student>();
     }
 
     #endregion
@@ -24,7 +24,7 @@ public class StudentRepository : IStudentRepository
 
     public async Task<List<Student>> GetStudentsListAsync()
     {
-        return await _dBContext.students.Include(x=>x.Department).ToListAsync();
+        return await _dBContext.Include(x => x.Department).ToListAsync();
     }
 
     #endregion

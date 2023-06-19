@@ -1,4 +1,4 @@
-﻿namespace Data.Interface.IServices;
+﻿namespace Infrastructure.Interface.IServices;
 
 public interface IStudentServices
 {
