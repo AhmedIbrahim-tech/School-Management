@@ -24,7 +24,7 @@ public class StudentRepository : IStudentRepository
 
     public async Task<List<Student>> GetStudentsListAsync()
     {
-        return await _dBContext.students.ToListAsync();
+        return await _dBContext.students.Include(x=>x.Department).ToListAsync();
     }
 
     #endregion
