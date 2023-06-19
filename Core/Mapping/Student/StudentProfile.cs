@@ -1,6 +1,4 @@
-﻿using Core.Features.Students.Queries.Results;
-
-namespace Core.Mapping.Student;
+﻿namespace Core.Mapping.Student;
 
 public class StudentProfile : Profile
 {

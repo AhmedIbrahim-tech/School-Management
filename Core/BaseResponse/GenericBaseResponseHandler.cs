@@ -1,7 +1,4 @@
-﻿using Azure;
-using System.Net;
-
-namespace Core.BaseResponse;
+﻿namespace Core.BaseResponse;
 
 public class GenericBaseResponseHandler
 {

@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Data.Entities;
+﻿namespace Data.Entities;
 
 public class Subjects
 {

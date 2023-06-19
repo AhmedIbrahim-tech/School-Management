@@ -1,17 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace API.Controllers
+﻿namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class StudentController : ControllerBase
     {
 
-        #region Fileds
+        #region Fields
         private readonly IMediator _mediator;
         #endregion
 
-        #region Constractor
+        #region Contractor
         public StudentController(IMediator mediator)
         {
             this._mediator = mediator;
@@ -29,7 +27,7 @@ namespace API.Controllers
         }
         #endregion
 
-        #region Search
+        #region Get Single Student by ID
         [HttpGet("/Student/Id/{id}")]
         public async Task<IActionResult> Getsinglestudent([FromRoute] int id)
         {

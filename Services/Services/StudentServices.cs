@@ -1,10 +1,4 @@
-﻿
-
-
-
-using Microsoft.EntityFrameworkCore;
-
-namespace Services.Services;
+﻿namespace Services.Services;
 
 public class StudentServices : IStudentServices
 {

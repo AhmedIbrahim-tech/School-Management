@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace Core.BaseResponse;
+﻿namespace Core.BaseResponse;
 
 public class GenericBaseResponse<T>
 {

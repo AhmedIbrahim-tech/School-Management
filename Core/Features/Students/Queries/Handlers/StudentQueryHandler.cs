@@ -1,5 +1,4 @@
-﻿
-namespace Core.Features.Students.Queries.Handlers;
+﻿namespace Core.Features.Students.Queries.Handlers;
 
 public class StudentQueryHandler : GenericBaseResponseHandler , 
                                    IRequestHandler<GetStudentListQuery, GenericBaseResponse<List<GetStudentListResponse>>>,

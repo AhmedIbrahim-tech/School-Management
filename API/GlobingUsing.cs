@@ -1,4 +1,5 @@
-﻿global using Infrastructure;
+﻿global using Microsoft.AspNetCore.Mvc;
+global using Infrastructure;
 global using Services;
 global using Core;
 global using MediatR;

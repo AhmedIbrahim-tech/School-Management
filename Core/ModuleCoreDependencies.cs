@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
-
-namespace Core;
+﻿namespace Core;
 
 public static class ModuleCoreDependencies
 {
