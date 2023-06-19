@@ -1,4 +1,6 @@
-﻿namespace Services.Services;
+﻿
+
+namespace Services.Services;
 
 public class StudentServices : IStudentServices
 {
