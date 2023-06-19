@@ -1,6 +1,6 @@
-﻿namespace API.Controllers
+﻿
+namespace API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class StudentController : ControllerBase
     {
@@ -19,7 +19,7 @@
         #region Handler Function
 
         #region Search
-        [HttpGet("/Student/Search")]
+        [HttpGet(Router.Student.Search)]
         public async Task<IActionResult> GetListofstudent()
         {
             var response = await _mediator.Send(new GetStudentListQuery());
@@ -28,7 +28,7 @@
         #endregion
 
         #region Get Single Student by ID
-        [HttpGet("/Student/Id/{id}")]
+        [HttpGet(Router.Student.GetById)]
         public async Task<IActionResult> Getsinglestudent([FromRoute] int id)
         {
             //var response = await _mediator.Send(new GetSingleStudentQuery() { Id = id});
