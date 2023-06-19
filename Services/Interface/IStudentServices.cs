@@ -4,4 +4,5 @@ public interface IStudentServices
 {
     Task<List<Student>> GetStudentsListAsync();
     Task<Student> GetStudentsByIdAsync(int id);
+    Task<string> AddAsync(Student student);
 }

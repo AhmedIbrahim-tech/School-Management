@@ -48,6 +48,26 @@ public class GenericBaseResponseHandler
         };
     }
 
+    public GenericBaseResponse<T> UnprocessableEntity<T>(string Message = null)
+    {
+        return new GenericBaseResponse<T>()
+        {
+            StatusCode = HttpStatusCode.UnprocessableEntity,
+            Succeeded = false,
+            Message = Message == null ? "Unprocessable Entity" : Message
+        };
+    }
+
+    public GenericBaseResponse<T> AlreadyExit<T>(string Message = null)
+    {
+        return new GenericBaseResponse<T>()
+        {
+            StatusCode = HttpStatusCode.OK,
+            Succeeded = false,
+            Message = Message == null ? "Object Already Exit" : Message
+        };
+    }
+
     public GenericBaseResponse<T> NotFound<T>(string message = null)
     {
         return new GenericBaseResponse<T>()

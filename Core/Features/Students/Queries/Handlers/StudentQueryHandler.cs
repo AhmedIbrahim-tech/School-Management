@@ -4,12 +4,12 @@ public class StudentQueryHandler : GenericBaseResponseHandler ,
                                    IRequestHandler<GetStudentListQuery, GenericBaseResponse<List<GetStudentListResponse>>>,
                                    IRequestHandler<GetSingleStudentQuery, GenericBaseResponse<GetSingleStudentResponse>>
 {
-    #region Fileds
+    #region Fields
     private readonly IStudentServices _studentServices;
     private readonly IMapper _mapper;
     #endregion
 
-    #region Constractor
+    #region Contractor
     public StudentQueryHandler(IStudentServices studentServices, IMapper mapper)
     {
         this._studentServices = studentServices;

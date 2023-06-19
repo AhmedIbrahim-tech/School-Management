@@ -7,3 +7,5 @@ global using Core.BaseResponse;
 global using Services.Interface.IServices;
 global using Microsoft.Extensions.DependencyInjection;
 global using System.Reflection;
+global using Core.Features.Students.Commands.Models;
+

@@ -1,4 +1,6 @@
 ﻿
+using Core.Features.Students.Commands.Models;
+
 namespace API.Controllers
 {
     [ApiController]
@@ -33,6 +35,15 @@ namespace API.Controllers
         {
             //var response = await _mediator.Send(new GetSingleStudentQuery() { Id = id});
             var response = await _mediator.Send(new GetSingleStudentQuery(id));
+            return Ok(response);
+        }
+        #endregion
+
+        #region Create
+        [HttpPost(Router.Student.Create)]
+        public async Task<IActionResult> Create([FromBody] AddStudentCommand dto)
+        {
+            var response = await _mediator.Send(dto);
             return Ok(response);
         }
         #endregion
