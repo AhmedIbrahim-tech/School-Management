@@ -1,7 +1,3 @@
-
-
-
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -23,7 +19,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(option =>
 
 #region Dependency Injection
 
-builder.Services.AddInfrastructureDependencies().AddServicesDependencies();
+builder.Services.AddInfrastructureDependencies().AddServicesDependencies().AddCoreDependencies();
 
 #endregion
 
@@ -60,4 +56,5 @@ catch (Exception ex)
 }
 
 #endregion
+
 app.Run();
