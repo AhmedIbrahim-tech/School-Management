@@ -1,4 +1,4 @@
-﻿using FluentValidation.AspNetCore;
+﻿using Core.Behavior;
 
 namespace Core;
 
@@ -13,10 +13,11 @@ public static class ModuleCoreDependencies
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         //Add Fluent Validation
-        services.AddFluentValidation(options =>
-        {
-            options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
-        });
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
+        // ValidationBehavior
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+
         return services;
     }
 }

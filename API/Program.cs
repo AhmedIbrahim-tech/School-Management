@@ -37,6 +37,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseMiddleware<ErrorHandlerMiddleware>();
+
 
 #region Update Database
 

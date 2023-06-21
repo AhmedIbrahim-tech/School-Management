@@ -35,14 +35,14 @@ public class StudentServices : IStudentServices
                                        .Where(x => x.StudID.Equals(id))
                                        .FirstOrDefaultAsync();
         return result;
-    } 
+    }
     #endregion
 
     #region Add Student
     public async Task<string> AddAsync(Student student)
     {
         // Check if Student is Exist
-        var CheckExist = await _studentRepository.GetTableNoTracking().Where(x=>x.Name.Equals(student.Name)).FirstOrDefaultAsync();
+        var CheckExist = await _studentRepository.GetTableNoTracking().Where(x => x.Name.Equals(student.Name)).FirstOrDefaultAsync();
         if (CheckExist != null)
         {
             return "Exist";
@@ -53,7 +53,16 @@ public class StudentServices : IStudentServices
             await _studentRepository.AddAsync(student);
             return "Successfully";
         }
-    } 
+    }
+    #endregion
+
+    #region Check Name Exist
+    public async Task<bool> IsExistNameAsync(string name)
+    {
+        var response = _studentRepository.GetTableNoTracking().Where(x => x.Name.Equals(name)).FirstOrDefaultAsync();
+        if (response == null) return false;
+        return true;
+    }
     #endregion
 
     #endregion
