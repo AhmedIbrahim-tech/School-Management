@@ -1,4 +1,6 @@
-﻿namespace Core;
+﻿using FluentValidation.AspNetCore;
+
+namespace Core;
 
 public static class ModuleCoreDependencies
 {
@@ -10,6 +12,11 @@ public static class ModuleCoreDependencies
         //Configration of AutoMapper
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
+        //Add Fluent Validation
+        services.AddFluentValidation(options =>
+        {
+            options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+        });
         return services;
     }
 }

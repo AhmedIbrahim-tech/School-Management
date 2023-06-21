@@ -1,9 +1,8 @@
-﻿using Core.Features.Students.Commands.Models;
-using Data.Entities;
+﻿using Data.Entities;
 
 namespace Core.Features.Students.Commands.Handlers;
 
-public class StudentCommandHandler : GenericBaseResponseHandler , IRequestHandler<AddStudentCommand, GenericBaseResponse<string>>
+public class StudentCommandHandler : GenericBaseResponseHandler, IRequestHandler<AddStudentCommand, GenericBaseResponse<string>>
 {
 
     #region Fields
@@ -25,7 +24,7 @@ public class StudentCommandHandler : GenericBaseResponseHandler , IRequestHandle
     {
         // Mapping
         var Mapper = _mapper.Map<Student>(request);
-        
+
         // Added
         var response = await _studentServices.AddAsync(Mapper);
 
@@ -33,8 +32,6 @@ public class StudentCommandHandler : GenericBaseResponseHandler , IRequestHandle
         if (response == "Exist") return AlreadyExit<string>();
         else if (response == "Successfully") return Created<string>(response);
         else return NotFound<string>();
-
-
     }
 
     #endregion
