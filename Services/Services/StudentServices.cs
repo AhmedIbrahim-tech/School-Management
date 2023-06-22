@@ -57,9 +57,6 @@ public class StudentServices : IStudentServices
             case StudentOrderEnum.DepartmentName:
                 Queryable = Queryable.OrderBy(x => x.Department.DName);
                 break;
-
-            default:
-                break;
         }
         return Queryable;
     }
