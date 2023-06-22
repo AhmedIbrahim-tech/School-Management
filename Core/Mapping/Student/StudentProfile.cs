@@ -22,6 +22,9 @@ public class StudentProfile : Profile
             .ForMember(response => response.DepartmentID, options => options.MapFrom(Sour => Sour.DepartmentId))
             .ForMember(response => response.StudID, option => option.MapFrom(sour => sour.Id));
 
+        //Delete Student 
+        CreateMap<DeleteStudentCommand, Data.Entities.Student>();
+
     }
 }
 

@@ -42,6 +42,15 @@
         }
         #endregion
 
+        #region Delete
+        [HttpDelete(Router.Student.Delete)]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            var response = await _mediator.Send(new DeleteStudentCommand(id));
+            return ActionResult(response);
+        }
+        #endregion
+
         #endregion
 
     }

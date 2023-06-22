@@ -85,5 +85,13 @@ public class StudentServices : IStudentServices
     }
     #endregion
 
+    #region Delete Student
+    public async Task<int> DeleteAsync(Student student)
+    {
+        await _studentRepository.DeleteAsync(student);
+        return 1;
+    }
+    #endregion
+
     #endregion
 }

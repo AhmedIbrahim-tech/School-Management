@@ -15,9 +15,10 @@ public static class Router
         public const string Prefix = Rule + "Student/";
 
         public const string Search = Prefix + "Search";
-        public const string GetById = Prefix + SingleRoute;
+        public const string GetById = Prefix + "GetByID" + "/" + SingleRoute;
         public const string Create = Prefix + "Create";
         public const string Edit = Prefix + "Edit";
+        public const string Delete = Prefix + "Delete" + "/" + SingleRoute;
 
     }
     #endregion
