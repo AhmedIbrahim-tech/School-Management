@@ -33,6 +33,15 @@
         }
         #endregion
 
+        #region Edit
+        [HttpPut(Router.Student.Edit)]
+        public async Task<IActionResult> Edit([FromBody] EditStudentCommand dto)
+        {
+            var response = await _mediator.Send(dto);
+            return ActionResult(response);
+        }
+        #endregion
+
         #endregion
 
     }

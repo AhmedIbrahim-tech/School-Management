@@ -5,17 +5,23 @@ public class StudentProfile : Profile
 {
     public StudentProfile()
     {
-        // GetStudentListResponse
+        // Get Student List 
         CreateMap<Data.Entities.Student, GetStudentListResponse>()
             .ForMember(response => response.DepartmentName, options => options.MapFrom(Sour => Sour.Department.DName));
 
-        //GetSingleStudentResponse
+        //Get Single Student 
         CreateMap<Data.Entities.Student, GetSingleStudentResponse>()
             .ForMember(response => response.DepartmentName, options => options.MapFrom(Sour => Sour.Department.DName));
 
-        //AddStudentCommand
+        //Add Student 
         CreateMap<AddStudentCommand, Data.Entities.Student>()
             .ForMember(response => response.DepartmentID, options => options.MapFrom(Sour => Sour.DepartmentId));
+
+        //Edit Student 
+        CreateMap<EditStudentCommand, Data.Entities.Student>()
+            .ForMember(response => response.DepartmentID, options => options.MapFrom(Sour => Sour.DepartmentId))
+            .ForMember(response => response.StudID, option => option.MapFrom(sour => sour.Id));
+
     }
 }
 

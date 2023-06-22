@@ -4,7 +4,7 @@ public class GenericBaseResponseHandler
 {
     public GenericBaseResponseHandler()
     {
-        
+
     }
 
     public GenericBaseResponse<T> Delete<T>()
@@ -17,7 +17,7 @@ public class GenericBaseResponseHandler
         };
     }
 
-    public GenericBaseResponse<T> Success<T>(T entity , object Meta = null)
+    public GenericBaseResponse<T> Success<T>(T entity, object Meta = null)
     {
         return new GenericBaseResponse<T>()
         {
@@ -86,6 +86,18 @@ public class GenericBaseResponseHandler
             StatusCode = HttpStatusCode.Created,
             Succeeded = true,
             Message = "Created Successfully",
+            Meta = Meta
+        };
+    }
+
+    public GenericBaseResponse<T> Updated<T>(T entity, object Meta = null)
+    {
+        return new GenericBaseResponse<T>()
+        {
+            Data = entity,
+            StatusCode = HttpStatusCode.OK,
+            Succeeded = true,
+            Message = "Updated Successfully",
             Meta = Meta
         };
     }

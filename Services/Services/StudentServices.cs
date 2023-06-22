@@ -39,29 +39,49 @@ public class StudentServices : IStudentServices
     #endregion
 
     #region Add Student
-    public async Task<string> AddAsync(Student student)
+    public async Task<int> AddAsync(Student student)
     {
-        // Check if Student is Exist
-        var CheckExist = await _studentRepository.GetTableNoTracking().Where(x => x.Name.Equals(student.Name)).FirstOrDefaultAsync();
-        if (CheckExist != null)
-        {
-            return "Exist";
-        }
-        // Add Student
-        else
-        {
-            await _studentRepository.AddAsync(student);
-            return "Successfully";
-        }
+        #region Old Function 
+        //// Check if Student is Exist
+        //var CheckExist = await _studentRepository.GetTableNoTracking().Where(x => x.Name.Equals(student.Name)).FirstOrDefaultAsync();
+        //if (CheckExist != null)
+        //{
+        //    return "Exist";
+        //}
+        //// Add Student
+        //else
+        //{
+        //    await _studentRepository.AddAsync(student);
+        //    return "Successfully";
+        //}
+        #endregion
+        await _studentRepository.AddAsync(student);
+        return 1;
     }
     #endregion
 
     #region Check Name Exist
     public async Task<bool> IsExistNameAsync(string name)
     {
-        var response = _studentRepository.GetTableNoTracking().Where(x => x.Name.Equals(name)).FirstOrDefaultAsync();
+        var response = await _studentRepository.GetTableNoTracking().Where(x => x.Name.Equals(name)).FirstOrDefaultAsync();
         if (response == null) return false;
         return true;
+    }
+
+    public async Task<bool> IsExistNameExcuteSelfAsync(string name, int id)
+    {
+        var response = await _studentRepository.GetTableNoTracking().Where(x => x.Name.Equals(name) & !x.StudID.Equals(id)).FirstOrDefaultAsync();
+        if (response == null) return false;
+        return true;
+    }
+
+    #endregion
+
+    #region Edit Student
+    public async Task<int> EditAsync(Student student)
+    {
+        await _studentRepository.UpdateAsync(student);
+        return 1;
     }
     #endregion
 

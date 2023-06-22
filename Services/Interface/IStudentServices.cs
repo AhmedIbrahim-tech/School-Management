@@ -4,6 +4,8 @@ public interface IStudentServices
 {
     Task<List<Student>> GetStudentsListAsync();
     Task<Student> GetStudentsByIdAsync(int id);
-    Task<string> AddAsync(Student student);
+    Task<int> AddAsync(Student student);
     Task<bool> IsExistNameAsync(string name);
+    Task<bool> IsExistNameExcuteSelfAsync(string name, int id);
+    Task<int> EditAsync(Student student);
 }
