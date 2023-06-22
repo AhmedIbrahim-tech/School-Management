@@ -33,12 +33,33 @@ public class StudentServices : IStudentServices
         return _studentRepository.GetTableNoTracking().Include(x => x.Department).AsQueryable();
     }
 
-    public IQueryable<Student> FilterStudentsPaginationQueryAbleAsync(string search)
+    public IQueryable<Student> FilterStudentsPaginationQueryAbleAsync(StudentOrderEnum orderEnum, string search)
     {
         var Queryable = _studentRepository.GetTableNoTracking().Include(x => x.Department).AsQueryable();
         if (Queryable != null)
         {
             Queryable.Where(x => x.Name.Contains(search) || x.Address.Contains(search));
+        }
+        switch (orderEnum)
+        {
+            case StudentOrderEnum.StudID:
+                Queryable = Queryable.OrderBy(x => x.StudID);
+                break;
+
+            case StudentOrderEnum.Name:
+                Queryable = Queryable.OrderBy(x => x.Name);
+                break;
+
+            case StudentOrderEnum.Address:
+                Queryable = Queryable.OrderBy(x => x.Address);
+                break;
+
+            case StudentOrderEnum.DepartmentName:
+                Queryable = Queryable.OrderBy(x => x.Department.DName);
+                break;
+
+            default:
+                break;
         }
         return Queryable;
     }

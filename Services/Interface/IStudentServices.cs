@@ -4,7 +4,7 @@ public interface IStudentServices
 {
     Task<List<Student>> GetStudentsListAsync();
     IQueryable<Student> GetStudentsQueryAbleAsync();
-    IQueryable<Student> FilterStudentsPaginationQueryAbleAsync(string search);
+    IQueryable<Student> FilterStudentsPaginationQueryAbleAsync(StudentOrderEnum orderEnum, string search);
     Task<Student> GetStudentsByIdAsync(int id);
     Task<int> AddAsync(Student student);
     Task<bool> IsExistNameAsync(string name);
