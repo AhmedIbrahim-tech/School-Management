@@ -27,6 +27,23 @@ public class StudentServices : IStudentServices
 
     #endregion
 
+    #region IQueryable of Students
+    public IQueryable<Student> GetStudentsQueryAbleAsync()
+    {
+        return _studentRepository.GetTableNoTracking().Include(x => x.Department).AsQueryable();
+    }
+
+    public IQueryable<Student> FilterStudentsPaginationQueryAbleAsync(string search)
+    {
+        var Queryable = _studentRepository.GetTableNoTracking().Include(x => x.Department).AsQueryable();
+        if (Queryable != null)
+        {
+            Queryable.Where(x => x.Name.Contains(search) || x.Address.Contains(search));
+        }
+        return Queryable;
+    }
+    #endregion
+
     #region Get Student By Id
     public async Task<Student> GetStudentsByIdAsync(int id)
     {
@@ -92,6 +109,7 @@ public class StudentServices : IStudentServices
         return 1;
     }
     #endregion
+
 
     #endregion
 }

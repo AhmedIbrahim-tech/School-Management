@@ -5,7 +5,9 @@ global using Core.Features.Students.Queries.Models;
 global using Core.Features.Students.Queries.Results;
 global using FluentValidation;
 global using MediatR;
+global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.DependencyInjection;
 global using Services.Interface.IServices;
 global using System.Net;
 global using System.Reflection;
+

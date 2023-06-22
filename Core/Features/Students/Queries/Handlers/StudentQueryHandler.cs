@@ -1,8 +1,13 @@
-﻿namespace Core.Features.Students.Queries.Handlers;
+﻿using Core.Wrappers;
+using Data.Entities;
+using System.Linq.Expressions;
 
-public class StudentQueryHandler : GenericBaseResponseHandler , 
+namespace Core.Features.Students.Queries.Handlers;
+
+public class StudentQueryHandler : GenericBaseResponseHandler,
                                    IRequestHandler<GetStudentListQuery, GenericBaseResponse<List<GetStudentListResponse>>>,
-                                   IRequestHandler<GetSingleStudentQuery, GenericBaseResponse<GetSingleStudentResponse>>
+                                   IRequestHandler<GetSingleStudentQuery, GenericBaseResponse<GetSingleStudentResponse>>,
+                                   IRequestHandler<GetStudentPaginationListQuery, PaginationResult<GetStudentPaginationListResponse>>
 {
     #region Fields
     private readonly IStudentServices _studentServices;
@@ -32,6 +37,14 @@ public class StudentQueryHandler : GenericBaseResponseHandler ,
         var MapperObj = _mapper.Map<GetSingleStudentResponse>(response);
         return Success(MapperObj);
 
+    }
+
+    public Task<PaginationResult<GetStudentPaginationListResponse>> Handle(GetStudentPaginationListQuery request, CancellationToken cancellationToken)
+    {
+        Expression<Func<Student, GetStudentPaginationListResponse>> expression = e => new GetStudentPaginationListResponse(e.StudID, e.Name, e.Address, e.Phone, e.Department.DName);
+        var FilterQuery = _studentServices.FilterStudentsPaginationQueryAbleAsync(request.Search);
+        var PaginationList = FilterQuery.Select(expression).ToPaginationListAsync(request.PageNumber, request.PageSize);
+        return PaginationList;
     }
     #endregion
 }

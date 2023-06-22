@@ -14,7 +14,8 @@ public static class Router
     {
         public const string Prefix = Rule + "Student/";
 
-        public const string Search = Prefix + "Search";
+        public const string List = Prefix + "List";
+        public const string Pagination = Prefix + "Pagination";
         public const string GetById = Prefix + "GetByID" + "/" + SingleRoute;
         public const string Create = Prefix + "Create";
         public const string Edit = Prefix + "Edit";

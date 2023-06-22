@@ -6,10 +6,17 @@
         #region Handler Function
 
         #region Search
-        [HttpGet(Router.Student.Search)]
-        public async Task<IActionResult> GetListofstudent()
+        [HttpGet(Router.Student.List)]
+        public async Task<IActionResult> GetStudentship()
         {
             var response = await _mediator.Send(new GetStudentListQuery());
+            return Ok(response);
+        }
+
+        [HttpPost(Router.Student.Pagination)]
+        public async Task<IActionResult> Pagination([FromBody] GetStudentPaginationListQuery DOT)
+        {
+            var response = await _mediator.Send(DOT);
             return Ok(response);
         }
         #endregion
