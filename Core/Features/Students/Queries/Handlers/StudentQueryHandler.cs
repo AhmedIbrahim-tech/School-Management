@@ -25,7 +25,9 @@ public class StudentQueryHandler : GenericBaseResponseHandler,
     {
         var response = await _studentServices.GetStudentsListAsync();
         var MapperObj = _mapper.Map<List<GetStudentListResponse>>(response);
-        return Success(MapperObj);
+        var result = Success(MapperObj);
+        result.Meta = new { Count = result.Data.Count() };
+        return result;
     }
 
     public async Task<GenericBaseResponse<GetSingleStudentResponse>> Handle(GetSingleStudentQuery request, CancellationToken cancellationToken)
@@ -37,11 +39,13 @@ public class StudentQueryHandler : GenericBaseResponseHandler,
 
     }
 
-    public Task<PaginationResult<GetStudentPaginationListResponse>> Handle(GetStudentPaginationListQuery request, CancellationToken cancellationToken)
+    public async Task<PaginationResult<GetStudentPaginationListResponse>> Handle(GetStudentPaginationListQuery request, CancellationToken cancellationToken)
     {
-        Expression<Func<Student, GetStudentPaginationListResponse>> expression = e => new GetStudentPaginationListResponse(e.StudID, e.NameEn, e.Address, e.Phone, e.Department.DNameEn);
+        Expression<Func<Student, GetStudentPaginationListResponse>> expression = e => new GetStudentPaginationListResponse
+                    (e.StudID, e.GeneralLocalizable(e.NameAr, e.NameEn), e.Address, e.Phone, e.GeneralLocalizable(e.Department.DNameAr, e.Department.DNameEn));
         var FilterQuery = _studentServices.FilterStudentsPaginationQueryAbleAsync(request.Orderby, request.Search);
-        var PaginationList = FilterQuery.Select(expression).ToPaginationListAsync(request.PageNumber, request.PageSize);
+        var PaginationList = await FilterQuery.Select(expression).ToPaginationListAsync(request.PageNumber, request.PageSize);
+        PaginationList.Meta = new { Count = PaginationList.Data.Count() };
         return PaginationList;
     }
     #endregion
