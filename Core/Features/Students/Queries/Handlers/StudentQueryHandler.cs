@@ -42,7 +42,7 @@ public class StudentQueryHandler : GenericBaseResponseHandler,
     public Task<PaginationResult<GetStudentPaginationListResponse>> Handle(GetStudentPaginationListQuery request, CancellationToken cancellationToken)
     {
         Expression<Func<Student, GetStudentPaginationListResponse>> expression = e => new GetStudentPaginationListResponse(e.StudID, e.Name, e.Address, e.Phone, e.Department.DName);
-        var FilterQuery = _studentServices.FilterStudentsPaginationQueryAbleAsync(request.Search);
+        var FilterQuery = _studentServices.FilterStudentsPaginationQueryAbleAsync(request.Orderby , request.Search);
         var PaginationList = FilterQuery.Select(expression).ToPaginationListAsync(request.PageNumber, request.PageSize);
         return PaginationList;
     }
