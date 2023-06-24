@@ -7,7 +7,7 @@ public static class ModuleServicesDependencies
 {
     public static IServiceCollection AddServicesDependencies(this IServiceCollection services)
     {
-        services.AddTransient<IStudentServices , StudentServices>();
+        services.AddTransient<IStudentServices, StudentServices>();
         return services;
     }
 }

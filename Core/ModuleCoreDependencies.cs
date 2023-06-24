@@ -6,10 +6,10 @@ public static class ModuleCoreDependencies
 {
     public static IServiceCollection AddCoreDependencies(this IServiceCollection services)
     {
-        //Congigration of IMediator
+        //Configuration of IMediator
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
 
-        //Configration of AutoMapper
+        //Configuration of AutoMapper
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
         //Add Fluent Validation

@@ -1,8 +1,4 @@
-﻿using Core.Wrappers;
-using Data.Entities;
-using System.Linq.Expressions;
-
-namespace Core.Features.Students.Queries.Handlers;
+﻿namespace Core.Features.Students.Queries.Handlers;
 
 public class StudentQueryHandler : GenericBaseResponseHandler,
                                    IRequestHandler<GetStudentListQuery, GenericBaseResponse<List<GetStudentListResponse>>>,
@@ -12,13 +8,15 @@ public class StudentQueryHandler : GenericBaseResponseHandler,
     #region Fields
     private readonly IStudentServices _studentServices;
     private readonly IMapper _mapper;
+    private readonly IStringLocalizer<SharedResources> _stringLocalizer;
     #endregion
 
     #region Contractor
-    public StudentQueryHandler(IStudentServices studentServices, IMapper mapper)
+    public StudentQueryHandler(IStudentServices studentServices, IMapper mapper, IStringLocalizer<SharedResources> stringLocalizer) : base(stringLocalizer)
     {
-        this._studentServices = studentServices;
-        this._mapper = mapper;
+        _studentServices = studentServices;
+        _mapper = mapper;
+        _stringLocalizer = stringLocalizer;
     }
     #endregion
 
@@ -33,7 +31,7 @@ public class StudentQueryHandler : GenericBaseResponseHandler,
     public async Task<GenericBaseResponse<GetSingleStudentResponse>> Handle(GetSingleStudentQuery request, CancellationToken cancellationToken)
     {
         var response = await _studentServices.GetStudentsByIdAsync(request.Id);
-        if (response == null) return NotFound<GetSingleStudentResponse>("Object Not Found");
+        if (response == null) return NotFound<GetSingleStudentResponse>(_stringLocalizer[SharedResourcesKeys.NotFound]);
         var MapperObj = _mapper.Map<GetSingleStudentResponse>(response);
         return Success(MapperObj);
 
@@ -41,8 +39,8 @@ public class StudentQueryHandler : GenericBaseResponseHandler,
 
     public Task<PaginationResult<GetStudentPaginationListResponse>> Handle(GetStudentPaginationListQuery request, CancellationToken cancellationToken)
     {
-        Expression<Func<Student, GetStudentPaginationListResponse>> expression = e => new GetStudentPaginationListResponse(e.StudID, e.Name, e.Address, e.Phone, e.Department.DName);
-        var FilterQuery = _studentServices.FilterStudentsPaginationQueryAbleAsync(request.Orderby , request.Search);
+        Expression<Func<Student, GetStudentPaginationListResponse>> expression = e => new GetStudentPaginationListResponse(e.StudID, e.NameEn, e.Address, e.Phone, e.Department.DNameEn);
+        var FilterQuery = _studentServices.FilterStudentsPaginationQueryAbleAsync(request.Orderby, request.Search);
         var PaginationList = FilterQuery.Select(expression).ToPaginationListAsync(request.PageNumber, request.PageSize);
         return PaginationList;
     }

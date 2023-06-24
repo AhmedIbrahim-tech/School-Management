@@ -38,7 +38,7 @@ public class StudentServices : IStudentServices
         var Queryable = _studentRepository.GetTableNoTracking().Include(x => x.Department).AsQueryable();
         if (Queryable != null)
         {
-            Queryable.Where(x => x.Name.Contains(search) || x.Address.Contains(search));
+            Queryable.Where(x => x.NameEn.Contains(search) || x.Address.Contains(search));
         }
         switch (orderEnum)
         {
@@ -47,7 +47,7 @@ public class StudentServices : IStudentServices
                 break;
 
             case StudentOrderEnum.Name:
-                Queryable = Queryable.OrderBy(x => x.Name);
+                Queryable = Queryable.OrderBy(x => x.NameEn);
                 break;
 
             case StudentOrderEnum.Address:
@@ -55,7 +55,7 @@ public class StudentServices : IStudentServices
                 break;
 
             case StudentOrderEnum.DepartmentName:
-                Queryable = Queryable.OrderBy(x => x.Department.DName);
+                Queryable = Queryable.OrderBy(x => x.Department.DNameEn);
                 break;
 
             default:
@@ -104,14 +104,14 @@ public class StudentServices : IStudentServices
     #region Check Name Exist
     public async Task<bool> IsExistNameAsync(string name)
     {
-        var response = await _studentRepository.GetTableNoTracking().Where(x => x.Name.Equals(name)).FirstOrDefaultAsync();
+        var response = await _studentRepository.GetTableNoTracking().Where(x => x.NameEn.Equals(name)).FirstOrDefaultAsync();
         if (response == null) return false;
         return true;
     }
 
     public async Task<bool> IsExistNameExcuteSelfAsync(string name, int id)
     {
-        var response = await _studentRepository.GetTableNoTracking().Where(x => x.Name.Equals(name) & !x.StudID.Equals(id)).FirstOrDefaultAsync();
+        var response = await _studentRepository.GetTableNoTracking().Where(x => x.NameEn.Equals(name) & !x.StudID.Equals(id)).FirstOrDefaultAsync();
         if (response == null) return false;
         return true;
     }

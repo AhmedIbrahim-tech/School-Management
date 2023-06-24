@@ -4,7 +4,7 @@ public class GenericBaseResponse<T>
 {
     public GenericBaseResponse()
     {
-        
+
     }
 
     public GenericBaseResponse(T data, string message = null)
@@ -20,7 +20,7 @@ public class GenericBaseResponse<T>
         Message = message;
     }
 
-    public GenericBaseResponse(string message , bool succeeded)
+    public GenericBaseResponse(string message, bool succeeded)
     {
         Succeeded = succeeded;
         Message = message;

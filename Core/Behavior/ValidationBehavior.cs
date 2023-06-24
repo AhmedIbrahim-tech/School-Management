@@ -4,9 +4,12 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
        where TRequest : IRequest<TResponse>
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators;
-    public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
+    private readonly IStringLocalizer<SharedResources> _stringLocalizer;
+
+    public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators, IStringLocalizer<SharedResources> stringLocalizer)
     {
         _validators = validators;
+        _stringLocalizer = stringLocalizer;
     }
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
@@ -19,7 +22,7 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
 
             if (failures.Count != 0)
             {
-                var message = failures.Select(x => x.ErrorMessage).FirstOrDefault();
+                var message = failures.Select(x => _stringLocalizer[x.PropertyName] + ":" + _stringLocalizer[x.ErrorMessage]).FirstOrDefault();
 
                 throw new ValidationException(message);
 

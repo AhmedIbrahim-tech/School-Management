@@ -2,9 +2,11 @@
 
 public class GenericBaseResponseHandler
 {
-    public GenericBaseResponseHandler()
-    {
+    private readonly IStringLocalizer<SharedResources> _stringLocalizer;
 
+    public GenericBaseResponseHandler(IStringLocalizer<SharedResources> stringLocalizer)
+    {
+        _stringLocalizer = stringLocalizer;
     }
 
     public GenericBaseResponse<T> Delete<T>()
@@ -13,7 +15,7 @@ public class GenericBaseResponseHandler
         {
             StatusCode = HttpStatusCode.OK,
             Succeeded = true,
-            Message = "Deleted Successfully"
+            Message = _stringLocalizer[SharedResourcesKeys.Deleted]
         };
     }
 
@@ -23,7 +25,7 @@ public class GenericBaseResponseHandler
         {
             StatusCode = HttpStatusCode.OK,
             Succeeded = true,
-            Message = "Successfully",
+            Message = _stringLocalizer[SharedResourcesKeys.Completed],
             Data = entity,
             Meta = Meta
         };
@@ -35,7 +37,7 @@ public class GenericBaseResponseHandler
         {
             StatusCode = HttpStatusCode.Unauthorized,
             Succeeded = true,
-            Message = "UnAuthorized"
+            Message = _stringLocalizer[SharedResourcesKeys.Unauthorized]
         };
     }
     public GenericBaseResponse<T> BadRequest<T>(string Message = null)
@@ -44,7 +46,7 @@ public class GenericBaseResponseHandler
         {
             StatusCode = HttpStatusCode.BadRequest,
             Succeeded = false,
-            Message = Message == null ? "Bad Request" : Message
+            Message = Message == null ? _stringLocalizer[SharedResourcesKeys.BadRequest] : Message
         };
     }
 
@@ -54,7 +56,7 @@ public class GenericBaseResponseHandler
         {
             StatusCode = HttpStatusCode.UnprocessableEntity,
             Succeeded = false,
-            Message = Message == null ? "Unprocessable Entity" : Message
+            Message = Message == null ? "Un-processable Entity" : Message
         };
     }
 
@@ -64,7 +66,7 @@ public class GenericBaseResponseHandler
         {
             StatusCode = HttpStatusCode.OK,
             Succeeded = false,
-            Message = Message == null ? "Object Already Exit" : Message
+            Message = Message == null ? _stringLocalizer[SharedResourcesKeys.AlreadyExit] : Message
         };
     }
 
@@ -74,7 +76,7 @@ public class GenericBaseResponseHandler
         {
             StatusCode = HttpStatusCode.NotFound,
             Succeeded = false,
-            Message = message == null ? "Not Found" : message
+            Message = message == null ? _stringLocalizer[SharedResourcesKeys.NotFound] : message
         };
     }
 
@@ -85,7 +87,7 @@ public class GenericBaseResponseHandler
             Data = entity,
             StatusCode = HttpStatusCode.Created,
             Succeeded = true,
-            Message = "Created Successfully",
+            Message = _stringLocalizer[SharedResourcesKeys.Created],
             Meta = Meta
         };
     }
@@ -97,7 +99,7 @@ public class GenericBaseResponseHandler
             Data = entity,
             StatusCode = HttpStatusCode.OK,
             Succeeded = true,
-            Message = "Updated Successfully",
+            Message = _stringLocalizer[SharedResourcesKeys.Updated],
             Meta = Meta
         };
     }

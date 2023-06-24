@@ -23,6 +23,29 @@ builder.Services.AddInfrastructureDependencies().AddServicesDependencies().AddCo
 
 #endregion
 
+#region Localization
+
+builder.Services.AddControllersWithViews();
+builder.Services.AddLocalization(options =>
+{
+    options.ResourcesPath = "";
+});
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    List<CultureInfo> supportedCultures = new List<CultureInfo>()
+    {
+        new CultureInfo("en-US"),
+        new CultureInfo("ar-EG"),
+    };
+
+    options.DefaultRequestCulture = new RequestCulture("en-US");
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+});
+
+#endregion
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -39,6 +62,13 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseMiddleware<ErrorHandlerMiddleware>();
 
+
+#region Localization Middleware
+
+var option = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
+app.UseRequestLocalization(option.Value);
+
+#endregion
 
 #region Update Database
 

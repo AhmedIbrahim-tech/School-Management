@@ -1,6 +1,4 @@
-﻿using Data.Entities;
-
-namespace Core.Features.Students.Commands.Handlers;
+﻿namespace Core.Features.Students.Commands.Handlers;
 
 public class StudentCommandHandler : GenericBaseResponseHandler,
     IRequestHandler<AddStudentCommand, GenericBaseResponse<int>>,
@@ -12,13 +10,15 @@ public class StudentCommandHandler : GenericBaseResponseHandler,
     #region Fields
     private readonly IStudentServices _studentServices;
     private readonly IMapper _mapper;
+    private readonly IStringLocalizer<SharedResources> _stringLocalizer;
     #endregion
 
     #region Contractor (s)
-    public StudentCommandHandler(IStudentServices studentServices, IMapper mapper)
+    public StudentCommandHandler(IStudentServices studentServices, IMapper mapper, IStringLocalizer<SharedResources> stringLocalizer) : base(stringLocalizer)
     {
-        this._studentServices = studentServices;
-        this._mapper = mapper;
+        _studentServices = studentServices;
+        _mapper = mapper;
+        _stringLocalizer = stringLocalizer;
     }
     #endregion
 
