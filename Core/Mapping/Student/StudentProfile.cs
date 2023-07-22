@@ -8,12 +8,12 @@ public class StudentProfile : Profile
         // Get Student List 
         CreateMap<Data.Entities.Student, GetStudentListResponse>()
             .ForMember(response => response.DepartmentName, options => options.MapFrom(Sour => Sour.Department.DNameEn))
-            .ForMember(response => response.Name, options => options.MapFrom(Sour => Sour.GeneralLocalizable(Sour.NameAr, Sour.NameEn)));
+            .ForMember(response => response.Name, options => options.MapFrom(Sour => Sour.GeneralLocalize(Sour.NameAr, Sour.NameEn)));
 
         //Get Single Student 
         CreateMap<Data.Entities.Student, GetSingleStudentResponse>()
             .ForMember(response => response.DepartmentName, options => options.MapFrom(Sour => Sour.Department.DNameEn))
-            .ForMember(response => response.Name, options => options.MapFrom(Sour => Sour.GeneralLocalizable(Sour.NameAr, Sour.NameEn)));
+            .ForMember(response => response.Name, options => options.MapFrom(Sour => Sour.GeneralLocalize(Sour.NameAr, Sour.NameEn)));
 
 
         //Add Student 

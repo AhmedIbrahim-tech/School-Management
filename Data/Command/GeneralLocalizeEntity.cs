@@ -2,19 +2,19 @@
 
 namespace Data.Command
 {
-    public class GeneralLocalizableEntity
+    public class GeneralLocalizeEntity
     {
 
-        public string GeneralLocalizable(string textar, string texten)
+        public string GeneralLocalize(string textAr, string textEn)
         {
             CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
             if (cultureInfo.TwoLetterISOLanguageName.ToLower().Equals("ar"))
             {
-                return textar;
+                return textAr;
             }
             else
             {
-                return texten;
+                return textEn;
             }
         }
     }

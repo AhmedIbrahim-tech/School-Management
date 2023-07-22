@@ -1,7 +1,7 @@
 ﻿namespace Data.Entities;
 
 
-public class Student : GeneralLocalizableEntity
+public class Student : GeneralLocalizeEntity
 {
     [Key]
     public int StudID { get; set; }

@@ -52,7 +52,7 @@ public class StudentCommandHandler : GenericBaseResponseHandler,
         if (CurrentStudent == null) return NotFound<int>();
 
         // Mapping
-        var Mapper = _mapper.Map<Student>(request);
+        var Mapper = _mapper.Map(request, CurrentStudent);
 
         // Added
         var response = await _studentServices.EditAsync(Mapper);
@@ -64,6 +64,7 @@ public class StudentCommandHandler : GenericBaseResponseHandler,
     }
     #endregion
 
+    #region Handle of Delete
     public async Task<GenericBaseResponse<int>> Handle(DeleteStudentCommand request, CancellationToken cancellationToken)
     {
         // Check if this's Id Is Exist
@@ -81,6 +82,7 @@ public class StudentCommandHandler : GenericBaseResponseHandler,
 
 
     }
+    #endregion
 
     #endregion
 }

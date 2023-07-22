@@ -4,8 +4,8 @@ public static class Router
 {
     #region Const Params
     public const string root = "Api";
-    public const string vrsion = "v1";
-    public const string Rule = root + "/" + vrsion + "/";
+    public const string version = "v1";
+    public const string Rule = root + "/" + version + "/";
     public const string SingleRoute = "{id}";
     #endregion
 
