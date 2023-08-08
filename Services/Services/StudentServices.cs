@@ -1,17 +1,21 @@
-﻿namespace Services.Services;
+﻿using Infrastructure.Persistence;
+
+namespace Services.Services;
 
 public class StudentServices : IStudentServices
 {
     #region Fields
 
     private readonly IStudentRepository _studentRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
     #endregion
 
     #region Constructor
-    public StudentServices(IStudentRepository studentRepository)
+    public StudentServices(IStudentRepository studentRepository, IUnitOfWork unitOfWork)
     {
         _studentRepository = studentRepository;
+        this._unitOfWork = unitOfWork;
     }
     #endregion
 
@@ -22,7 +26,8 @@ public class StudentServices : IStudentServices
 
     public async Task<List<Student>> GetStudentsListAsync()
     {
-        return await _studentRepository.GetStudentsListAsync();
+        //return await _studentRepository.GetStudentsListAsync();
+        return await _unitOfWork.StudentRepository.GetStudentsListAsync();
     }
 
     #endregion
@@ -71,10 +76,12 @@ public class StudentServices : IStudentServices
     #region Get Student By Id
     public async Task<Student> GetStudentsByIdAsync(int id)
     {
-        var result = await _studentRepository.GetTableNoTracking()
-                                       .Include(x => x.Department)
-                                       .Where(x => x.StudID.Equals(id))
-                                       .FirstOrDefaultAsync();
+        //var result = await _studentRepository.GetTableNoTracking()
+        //                               .Include(x => x.Department)
+        //                               .Where(x => x.StudID.Equals(id))
+        //                               .FirstOrDefaultAsync();
+        var result = await _unitOfWork.StudentRepository
+            .GetTableNoTracking().Include(x => x.Department).Where(x => x.StudID.Equals(id)).FirstOrDefaultAsync();
         return result;
     }
     #endregion

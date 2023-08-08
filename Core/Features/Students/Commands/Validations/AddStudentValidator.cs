@@ -16,7 +16,7 @@ public class AddStudentValidator : AbstractValidator<AddStudentCommand>
 
     public void ApplyStudentValidatorRules()
     {
-        RuleFor(x => x.Name)
+        RuleFor(x => x.NameEn)
             .NotEmpty().WithMessage("{PropertyName} : " + _stringLocalizer[SharedResourcesKeys.NotEmpty])
             .NotNull().WithMessage("{PropertyValue} : " + _stringLocalizer[SharedResourcesKeys.NotNull])
             .MaximumLength(250).WithMessage("Max Length 250");
@@ -31,7 +31,7 @@ public class AddStudentValidator : AbstractValidator<AddStudentCommand>
 
     public void ApplyCutomeStudentValidatorRules()
     {
-        RuleFor(x => x.Name)
+        RuleFor(x => x.NameEn)
             .MustAsync(async (key, CancellationToken) => (!await _studentServices.IsExistNameAsync(key))).WithMessage("{PropertyName} Is Already Exist");
     }
 }

@@ -18,7 +18,9 @@ public class StudentProfile : Profile
 
         //Add Student 
         CreateMap<AddStudentCommand, Data.Entities.Student>()
-            .ForMember(response => response.DepartmentID, options => options.MapFrom(Sour => Sour.DepartmentId));
+            .ForMember(response => response.DepartmentID, options => options.MapFrom(Sour => Sour.DepartmentId))
+            .ForMember(response => response.NameAr, options => options.MapFrom(Sour => Sour.NameAr))
+            .ForMember(response => response.NameEn, options => options.MapFrom(Sour => Sour.NameEn));
 
 
         //Edit Student 

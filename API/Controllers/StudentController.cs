@@ -23,7 +23,7 @@
 
         #region Get Single Student by ID
         [HttpGet(Router.Student.GetById)]
-        public async Task<IActionResult> Getsinglestudent([FromRoute] int id)
+        public async Task<IActionResult> GetSingleStudent([FromRoute] int id)
         {
             //var response = await _mediator.Send(new GetSingleStudentQuery() { Id = id});
             var response = await _mediator.Send(new GetSingleStudentQuery(id));

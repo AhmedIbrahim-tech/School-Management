@@ -3,7 +3,12 @@
 
 public class Student : GeneralLocalizeEntity
 {
+    public Student()
+    {
+        StudentSubjects = new HashSet<StudentSubject>();
+    }
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int StudID { get; set; }
     [StringLength(200)]
     public string NameAr { get; set; }
@@ -19,5 +24,8 @@ public class Student : GeneralLocalizeEntity
     public int? DepartmentID { get; set; }
 
     [ForeignKey("DepartmentID")]
-    public virtual Department Department { get; set; }
+    //[InverseProperty("Student")]
+    public virtual Department? Department { get; set; }
+    [InverseProperty("Student")]
+    public virtual ICollection<StudentSubject> StudentSubjects { get; set; }
 }

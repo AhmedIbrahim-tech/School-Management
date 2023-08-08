@@ -3,15 +3,19 @@
 
 public class StudentSubject
 {
+    //public int StudSubID { get; set; }
     [Key]
-    public int StudSubID { get; set; }
     public int StudID { get; set; }
+    [Key]
     public int SubID { get; set; }
+    public decimal? Grade { get; set; }
 
     [ForeignKey("StudID")]
-    public virtual Student Student { get; set; }
+    //[InverseProperty("StudentSubjects")]
+    public virtual Student? Student { get; set; }
 
     [ForeignKey("SubID")]
-    public virtual Subjects Subject { get; set; }
+    //[InverseProperty("StudentsSubjects")]
+    public virtual Subjects? Subject { get; set; }
 
 }

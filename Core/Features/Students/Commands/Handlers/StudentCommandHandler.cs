@@ -52,9 +52,10 @@ public class StudentCommandHandler : GenericBaseResponseHandler,
         if (CurrentStudent == null) return NotFound<int>();
 
         // Mapping
+        //var Mapper = _mapper.Map<Student>(request);
         var Mapper = _mapper.Map(request, CurrentStudent);
 
-        // Added
+        // Edit
         var response = await _studentServices.EditAsync(Mapper);
 
         // return response

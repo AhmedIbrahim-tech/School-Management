@@ -1,4 +1,4 @@
-﻿namespace Core.Wrappers;
+﻿namespace Core.Pagination;
 
 public class PaginationResult<T>
 {

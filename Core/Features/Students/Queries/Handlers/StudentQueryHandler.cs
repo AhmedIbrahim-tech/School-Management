@@ -43,6 +43,7 @@ public class StudentQueryHandler : GenericBaseResponseHandler,
     {
         Expression<Func<Student, GetStudentPaginationListResponse>> expression = e => new GetStudentPaginationListResponse
                     (e.StudID, e.GeneralLocalize(e.NameAr, e.NameEn), e.Address, e.Phone, e.GeneralLocalize(e.Department.DNameAr, e.Department.DNameEn));
+
         var FilterQuery = _studentServices.FilterStudentsPaginationQueryAbleAsync(request.Orderby, request.Search);
         var PaginationList = await FilterQuery.Select(expression).ToPaginationListAsync(request.PageNumber, request.PageSize);
         PaginationList.Meta = new { Count = PaginationList.Data.Count() };

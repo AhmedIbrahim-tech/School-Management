@@ -1,14 +1,17 @@
 ﻿namespace Data.Entities;
 public class DepartmetSubject
 {
+    //public int DeptSubID { get; set; }
     [Key]
-    public int DeptSubID { get; set; }
     public int DID { get; set; }
+    [Key]
     public int SubID { get; set; }
 
     [ForeignKey("DID")]
-    public virtual Department Department { get; set; }
+    //[InverseProperty("DepartmentSubjects")]
+    public virtual Department? Department { get; set; }
 
     [ForeignKey("SubID")]
-    public virtual Subjects Subjects { get; set; }
+    //[InverseProperty("DepartmetsSubjects")]
+    public virtual Subjects? Subject { get; set; }
 }

@@ -4,7 +4,7 @@ global using Core.Features.Students.Commands.Models;
 global using Core.Features.Students.Queries.Models;
 global using Core.Features.Students.Queries.Results;
 global using Core.Localization;
-global using Core.Wrappers;
+global using Core.Pagination;
 global using Data.Entities;
 global using Data.Enums;
 global using FluentValidation;
