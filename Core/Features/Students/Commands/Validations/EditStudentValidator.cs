@@ -38,6 +38,11 @@ public class EditStudentValidator : AbstractValidator<EditStudentCommand>
         RuleFor(x => x.NameEn)
             .MustAsync(async (model, key, CancellationToken) => (!await _studentServices.IsExistNameExcuteSelfAsync(key, model.Id)))
             .WithMessage("{PropertyName} Is Already Exist");
+
+        RuleFor(x => x.NameAr)
+    .MustAsync(async (model, key, CancellationToken) => (!await _studentServices.IsExistNameExcuteSelfAsync(key, model.Id)))
+    .WithMessage("{PropertyName} Is Already Exist");
+
     }
     #endregion
 

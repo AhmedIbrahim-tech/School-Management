@@ -9,6 +9,9 @@ public static class ModuleInfrastructureDependencies
         services.AddTransient<IUnitOfWork, UnitOfWork>();
         services.AddTransient(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
         services.AddTransient<IStudentRepository, StudentRepository>();
+        services.AddTransient<IDepartmentRepository, DepartmentRepository>();
+        services.AddTransient<IInstructorRepository, InstructorRepository>();
+        services.AddTransient<ISubjectsRepository, SubjectsRepository>();
 
         return services;
     }

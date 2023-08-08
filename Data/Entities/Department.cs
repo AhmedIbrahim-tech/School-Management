@@ -1,6 +1,6 @@
 ﻿namespace Data.Entities;
 
-public partial class Department
+public partial class Department : GeneralLocalizeEntity
 {
     public Department()
     {

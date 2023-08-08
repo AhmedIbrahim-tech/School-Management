@@ -1,6 +1,6 @@
 ﻿namespace Data.Entities;
 
-public class Instructor
+public class Instructor : GeneralLocalizeEntity
 {
     public Instructor()
     {

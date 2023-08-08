@@ -1,6 +1,6 @@
 ﻿namespace Data.Entities;
 
-public class Subjects
+public class Subjects : GeneralLocalizeEntity
 {
     public Subjects()
     {
@@ -16,7 +16,7 @@ public class Subjects
     [StringLength(500)]
     public string SubjectNameEn { get; set; }
 
-    public DateTime? Period { get; set; }
+    public int? Period { get; set; }
     //[InverseProperty("Subject")]
     public virtual ICollection<StudentSubject> StudentsSubjects { get; set; }
 

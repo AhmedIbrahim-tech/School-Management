@@ -33,5 +33,9 @@ public class AddStudentValidator : AbstractValidator<AddStudentCommand>
     {
         RuleFor(x => x.NameEn)
             .MustAsync(async (key, CancellationToken) => (!await _studentServices.IsExistNameAsync(key))).WithMessage("{PropertyName} Is Already Exist");
+
+        RuleFor(x => x.NameAr)
+            .MustAsync(async (key, CancellationToken) => (!await _studentServices.IsExistNameAsync(key))).WithMessage("{PropertyName} Is Already Exist");
+
     }
 }

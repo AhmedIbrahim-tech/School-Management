@@ -19,4 +19,16 @@
     <ProjectReference Include="..\Services\Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Department\Commands\Handlers\" />
+    <Folder Include="Features\Department\Commands\Models\" />
+    <Folder Include="Features\Department\Commands\Validations\" />
+    <Folder Include="Features\Template\Commands\Handlers\" />
+    <Folder Include="Features\Template\Commands\Models\" />
+    <Folder Include="Features\Template\Commands\Validations\" />
+    <Folder Include="Features\Template\Queries\Handlers\" />
+    <Folder Include="Features\Template\Queries\Models\" />
+    <Folder Include="Features\Template\Queries\Results\" />
+  </ItemGroup>
+
 </Project>
