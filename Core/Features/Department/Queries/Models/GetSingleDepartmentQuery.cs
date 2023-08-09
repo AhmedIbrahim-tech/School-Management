@@ -5,15 +5,4 @@ public class GetSingleDepartmentQuery : IRequest<GenericBaseResponse<GetSingleDe
     public int Id { get; set; }
     public int StudentPageNumber { get; set; }
     public int StudentPageSize { get; set; }
-
-
-    public GetSingleDepartmentQuery(int id)
-    {
-        Id = id;
-    }
-
-    public GetSingleDepartmentQuery()
-    {
-
-    }
 }

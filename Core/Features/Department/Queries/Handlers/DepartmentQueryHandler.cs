@@ -5,21 +5,31 @@ namespace Core.Features.Department.Queries.Handlers;
 
 public class DepartmentQueryHandler : GenericBaseResponseHandler, IRequestHandler<GetSingleDepartmentQuery, GenericBaseResponse<GetSingleDepartmentResponse>>
 {
-    private readonly IMapper _mapper;
+    #region Fields
+    private readonly IDepartmentServices _departmentService;
+    private readonly IStudentServices _studentService;
     private readonly IStringLocalizer<SharedResources> _stringLocalizer;
-    private readonly IDepartmentServices _departmentServices;
+    private readonly IMapper _mapper;
+    #endregion
 
-    public DepartmentQueryHandler(IMapper mapper, IStringLocalizer<SharedResources> stringLocalizer, IDepartmentServices departmentServices) : base(stringLocalizer)
+    #region Constructors
+    public DepartmentQueryHandler(IStringLocalizer<SharedResources> stringLocalizer,
+                                  IDepartmentServices departmentService,
+                                  IMapper mapper,
+                                  IStudentServices studentService) : base(stringLocalizer)
     {
-        this._mapper = mapper;
-        this._stringLocalizer = stringLocalizer;
-        this._departmentServices = departmentServices;
+        _stringLocalizer = stringLocalizer;
+        _mapper = mapper;
+        _studentService = studentService;
+        _departmentService = departmentService;
     }
+
+    #endregion
 
     public async Task<GenericBaseResponse<GetSingleDepartmentResponse>> Handle(GetSingleDepartmentQuery request, CancellationToken cancellationToken)
     {
         // Async With services
-        var result = await _departmentServices.GetDepartmentByIdAsync(request.Id);
+        var result = await _departmentService.GetDepartmentByIdAsync(request.Id);
 
         // Check If Not Exits
         if (result == null) return NotFound<GetSingleDepartmentResponse>(_stringLocalizer[SharedResourcesKeys.NotFound]);
@@ -29,9 +39,9 @@ public class DepartmentQueryHandler : GenericBaseResponseHandler, IRequestHandle
 
         // Pagination
         Expression<Func<Student, StudentResponse>> expression = e => new StudentResponse(e.StudID, e.GeneralLocalize(e.NameAr, e.NameEn));
-        var FilterQuery = _departmentServices.GetStudentByDepartmentIDAbleAsync(request.Id);
-        var PaginationList = await FilterQuery.Select(expression).ToPaginationListAsync(request.StudentPageNumber, request.StudentPageSize);
-        PaginationList.Meta = new { Count = PaginationList.Data.Count() };
+        var studentQuerable = _studentService.GetStudentsByDepartmentIDQuerable(request.Id);
+        var PaginatedList = await studentQuerable.Select(expression).ToPaginationListAsync(request.StudentPageNumber, request.StudentPageSize);
+        Mapping.StudentsList = PaginatedList;
 
         // Return response
         return Success(Mapping);

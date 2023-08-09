@@ -30,13 +30,15 @@ public class DepartmentServices : IDepartmentServices
         return result ?? new Department();
     }
 
-
-
-    public IQueryable<Student> GetStudentByDepartmentIDAbleAsync(int DID)
+    public async Task<bool> IsDepartmentIdExist(int departmentId)
     {
-        var Queryable = _unitOfWork.StudentRepository.GetTableNoTracking().Where(x => x.DID.Equals(DID)).AsQueryable();
-        return Queryable;
+        return await _unitOfWork.DepartmentRepository.GetTableNoTracking().AnyAsync(x => x.DID.Equals(departmentId));
     }
+
+
+
+
+
 
     #endregion
 }

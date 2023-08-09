@@ -6,31 +6,26 @@ public class DepartmentProfile : Profile
     {
         //Get Single
         CreateMap<Data.Entities.Department, GetSingleDepartmentResponse>()
-            .ForMember(response => response.Name, options =>
-                                   options.MapFrom(Sour => Sour.GeneralLocalize(Sour.DNameAr, Sour.DNameEn)))
-            .ForMember(response => response.Id, options => options.MapFrom(Sour => Sour.DID))
-            .ForMember(response => response.ManagerName, options =>
-                                   options.MapFrom(Sour => Sour.GeneralLocalize(Sour.Instructor.ENameAr, Sour.Instructor.ENameEn)))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.GeneralLocalize(src.DNameAr, src.DNameEn)))
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.DID))
+            .ForMember(dest => dest.ManagerName, opt => opt.MapFrom(src => src.Instructor.GeneralLocalize(src.Instructor.ENameAr, src.Instructor.ENameEn)))
 
-            .ForMember(response => response.SubjectsList, options => options.MapFrom(Sour => Sour.DepartmentSubjects))
-            .ForMember(response => response.StudentsList, options => options.MapFrom(Sour => Sour.Students))
-            .ForMember(response => response.InstructorsList, options => options.MapFrom(Sour => Sour.Instructors))
-        .ReverseMap();
+            .ForMember(dest => dest.SubjectsList, opt => opt.MapFrom(src => src.DepartmentSubjects))
+            //.ForMember(dest => dest.StudentsList, opt => opt.MapFrom(src => src.Students))
+            .ForMember(dest => dest.InstructorsList, opt => opt.MapFrom(src => src.Instructors));
 
+        CreateMap<DepartmetSubject, SubjectResponse>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.SubID))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Subject.GeneralLocalize(src.Subject.SubjectNameAr, src.Subject.SubjectNameEn)));
 
-        CreateMap<Data.Entities.DepartmetSubject, SubjectResponse>()
-            .ForMember(x => x.Id, options => options.MapFrom(sour => sour.SubID))
-            .ForMember(x => x.Name, options => options.MapFrom(Sour => Sour.Subject.GeneralLocalize(Sour.Subject.SubjectNameAr, Sour.Subject.SubjectNameEn)));
+        //CreateMap<Student, StudentResponse>()
+        //     .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.StudID))
+        //     .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.GeneralLocalize(src.NameAr, src.NameEn)));
 
-        CreateMap<Data.Entities.Student, StudentResponse>()
-            .ForMember(x => x.Id, options => options.MapFrom(sour => sour.StudID))
-            .ForMember(x => x.Name, options => options.MapFrom(Sour => Sour.GeneralLocalize(Sour.NameAr, Sour.NameEn)));
-
-        CreateMap<Data.Entities.Instructor, SubjectResponse>()
-            .ForMember(x => x.Id, options => options.MapFrom(sour => sour.InsId))
-            .ForMember(x => x.Name, options => options.MapFrom(Sour => Sour.GeneralLocalize(Sour.ENameAr, Sour.ENameEn)));
+        CreateMap<Instructor, InstructorResponse>()
+             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.InsId))
+             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.GeneralLocalize(src.ENameAr, src.ENameEn)));
 
 
-        ;
     }
 }
