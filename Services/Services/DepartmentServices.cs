@@ -34,7 +34,7 @@ public class DepartmentServices : IDepartmentServices
 
     public IQueryable<Student> GetStudentByDepartmentIDAbleAsync(int DID)
     {
-        var Queryable = _unitOfWork.StudentRepository.GetTableNoTracking().Where(x => x.DepartmentID.Equals(DID)).AsQueryable();
+        var Queryable = _unitOfWork.StudentRepository.GetTableNoTracking().Where(x => x.DID.Equals(DID)).AsQueryable();
         return Queryable;
     }
 

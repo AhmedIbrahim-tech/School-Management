@@ -55,7 +55,7 @@ builder.Services.AddCors(options =>
             builder
                    .AllowAnyHeader()
                    .AllowAnyMethod()
-            .AllowAnyOrigin()
+                   .AllowAnyOrigin();
         });
 });
 #endregion
@@ -76,8 +76,9 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseMiddleware<ErrorHandlerMiddleware>();
 
+app.UseCors("AllowAll");
 
-#region Localization Middleware
+#region Localization Middle ware
 
 var option = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
 app.UseRequestLocalization(option.Value);

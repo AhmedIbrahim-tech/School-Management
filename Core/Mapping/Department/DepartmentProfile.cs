@@ -10,7 +10,7 @@ public class DepartmentProfile : Profile
                                    options.MapFrom(Sour => Sour.GeneralLocalize(Sour.DNameAr, Sour.DNameEn)))
             .ForMember(response => response.Id, options => options.MapFrom(Sour => Sour.DID))
             .ForMember(response => response.ManagerName, options =>
-                                   options.MapFrom(Sour => Sour.GeneralLocalize(Sour.Instructor.NameAr, Sour.Instructor.NameEn)))
+                                   options.MapFrom(Sour => Sour.GeneralLocalize(Sour.Instructor.ENameAr, Sour.Instructor.ENameEn)))
 
             .ForMember(response => response.SubjectsList, options => options.MapFrom(Sour => Sour.DepartmentSubjects))
             .ForMember(response => response.StudentsList, options => options.MapFrom(Sour => Sour.Students))
@@ -28,7 +28,7 @@ public class DepartmentProfile : Profile
 
         CreateMap<Data.Entities.Instructor, SubjectResponse>()
             .ForMember(x => x.Id, options => options.MapFrom(sour => sour.InsId))
-            .ForMember(x => x.Name, options => options.MapFrom(Sour => Sour.GeneralLocalize(Sour.NameAr, Sour.NameEn)));
+            .ForMember(x => x.Name, options => options.MapFrom(Sour => Sour.GeneralLocalize(Sour.ENameAr, Sour.ENameEn)));
 
 
         ;
