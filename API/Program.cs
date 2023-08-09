@@ -46,6 +46,20 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 
 #endregion
 
+#region CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "AllowAll",
+        builder =>
+        {
+            builder
+                   .AllowAnyHeader()
+                   .AllowAnyMethod()
+            .AllowAnyOrigin()
+        });
+});
+#endregion
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

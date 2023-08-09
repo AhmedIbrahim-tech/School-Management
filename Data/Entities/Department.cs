@@ -12,18 +12,18 @@ public partial class Department : GeneralLocalizeEntity
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int DID { get; set; }
     [StringLength(500)]
-    public string DNameAr { get; set; }
+    public string? DNameAr { get; set; }
     [StringLength(500)]
-    public string DNameEn { get; set; }
-    public int InsManager { get; set; }
+    public string? DNameEn { get; set; }
+    public int? InsManager { get; set; }
 
     //[InverseProperty("Department")]
-    public virtual ICollection<Student> Students { get; set; }
+    public virtual ICollection<Student>? Students { get; set; }
 
     //[InverseProperty("Department")]
-    public virtual ICollection<DepartmetSubject> DepartmentSubjects { get; set; }
+    public virtual ICollection<DepartmetSubject>? DepartmentSubjects { get; set; }
     //[InverseProperty("department")]
-    public virtual ICollection<Instructor> Instructors { get; set; }
+    public virtual ICollection<Instructor>? Instructors { get; set; }
 
     [ForeignKey(nameof(InsManager))]
     //[InverseProperty("departmentManager")]
