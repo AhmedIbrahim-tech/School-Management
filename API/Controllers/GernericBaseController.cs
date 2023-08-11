@@ -1,6 +1,5 @@
 ﻿namespace API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class GernericBaseController : ControllerBase
     {

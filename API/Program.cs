@@ -46,6 +46,20 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 
 #endregion
 
+#region CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "AllowAll",
+        builder =>
+        {
+            builder
+                   .AllowAnyHeader()
+                   .AllowAnyMethod()
+                   .AllowAnyOrigin();
+        });
+});
+#endregion
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -62,8 +76,9 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseMiddleware<ErrorHandlerMiddleware>();
 
+app.UseCors("AllowAll");
 
-#region Localization Middleware
+#region Localization Middle ware
 
 var option = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
 app.UseRequestLocalization(option.Value);

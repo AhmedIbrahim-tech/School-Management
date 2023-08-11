@@ -141,6 +141,11 @@ public class StudentServices : IStudentServices
     }
     #endregion
 
+    public IQueryable<Student> GetStudentsByDepartmentIDQuerable(int DID)
+    {
+        var Queryable = _unitOfWork.StudentRepository.GetTableNoTracking().Where(x => x.DID.Equals(DID)).AsQueryable();
+        return Queryable;
+    }
 
     #endregion
 }

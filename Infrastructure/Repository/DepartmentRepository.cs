@@ -22,6 +22,7 @@ public class DepartmentRepository : GenericRepositoryAsync<Department>, IDepartm
 
     #region Get List Of Department
 
+    
 
     #endregion
 

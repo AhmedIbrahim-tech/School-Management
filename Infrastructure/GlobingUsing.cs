@@ -1,9 +1,10 @@
-﻿global using System.Reflection;
-global using Data.Entities;
+﻿global using Data.Entities;
 global using Infrastructure.Data;
-global using Microsoft.EntityFrameworkCore;
-global using Infrastructure.Repository;
-global using Microsoft.Extensions.DependencyInjection;
-global using Microsoft.EntityFrameworkCore.Storage;
 global using Infrastructure.GenericRepository;
 global using Infrastructure.Interface;
+global using Infrastructure.Repository;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore.Metadata.Builders;
+global using Microsoft.EntityFrameworkCore.Storage;
+global using Microsoft.Extensions.DependencyInjection;
+global using System.Reflection;

@@ -12,4 +12,7 @@ public interface IStudentServices
     Task<int> EditAsync(Student student);
     Task<int> DeleteAsync(Student student);
 
+    IQueryable<Student> GetStudentsByDepartmentIDQuerable(int DID);
+
+
 }
