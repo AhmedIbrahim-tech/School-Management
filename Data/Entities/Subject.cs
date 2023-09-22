@@ -1,8 +1,8 @@
 ﻿namespace Data.Entities;
 
-public class Subjects : GeneralLocalizeEntity
+public class Subject : GeneralLocalizeEntity
 {
-    public Subjects()
+    public Subject()
     {
         StudentsSubjects = new HashSet<StudentSubject>();
         DepartmetsSubjects = new HashSet<DepartmetSubject>();

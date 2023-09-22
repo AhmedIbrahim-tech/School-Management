@@ -1,10 +1,10 @@
 ﻿namespace Infrastructure.Repository;
 
-public class SubjectsRepository : GenericRepositoryAsync<Subjects>, ISubjectsRepository
+public class SubjectsRepository : GenericRepositoryAsync<Subject>, ISubjectsRepository
 {
     #region Fields
 
-    private readonly DbSet<Subjects> _dBContext;
+    private readonly DbSet<Subject> _dBContext;
 
     #endregion
 
@@ -12,7 +12,7 @@ public class SubjectsRepository : GenericRepositoryAsync<Subjects>, ISubjectsRep
 
     public SubjectsRepository(ApplicationDBContext dBContext) : base(dBContext)
     {
-        _dBContext = dBContext.Set<Subjects>();
+        _dBContext = dBContext.Set<Subject>();
     }
 
     #endregion

@@ -15,6 +15,6 @@ public class StudentSubject
 
     [ForeignKey("SubID")]
     [InverseProperty("StudentsSubjects")]
-    public virtual Subjects? Subject { get; set; }
+    public virtual Subject? Subject { get; set; }
 
 }
