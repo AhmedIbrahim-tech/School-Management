@@ -1,4 +1,4 @@
-﻿namespace Core.Features.Students.Queries.Results;
+﻿namespace Core.Features.Students.Queries.Responses;
 
 public class GetSingleStudentResponse
 {

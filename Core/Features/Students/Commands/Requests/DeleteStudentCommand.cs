@@ -1,4 +1,4 @@
-﻿namespace Core.Features.Students.Commands.Models
+﻿namespace Core.Features.Students.Commands.Requests
 {
     public class DeleteStudentCommand : IRequest<GenericBaseResponse<int>>
     {

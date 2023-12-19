@@ -37,7 +37,7 @@ public class StudentCommandHandler : GenericBaseResponseHandler,
         //if (response == "Exist") return AlreadyExit<string>();
 
         // return response
-        if (response == 1) return Created<int>(response);
+        if (response > 0) return Created<int>(response);
         else return NotFound<int>();
     }
     #endregion

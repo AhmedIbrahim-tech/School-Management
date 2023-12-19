@@ -103,8 +103,8 @@ public class StudentServices : IStudentServices
         //    return "Successfully";
         //}
         #endregion
-        await _studentRepository.AddAsync(student);
-        return 1;
+        var result =  await _studentRepository.AddAsync(student);
+        return result.StudID;
     }
     #endregion
 

@@ -1,9 +1,9 @@
 ﻿global using AutoMapper;
 global using Core.BaseResponse;
 global using Core.Features.Department.Queries.Results;
-global using Core.Features.Students.Commands.Models;
-global using Core.Features.Students.Queries.Models;
-global using Core.Features.Students.Queries.Results;
+global using Core.Features.Students.Commands.Requests;
+global using Core.Features.Students.Queries.Requests;
+global using Core.Features.Students.Queries.Responses;
 global using Core.Localization;
 global using Core.Pagination;
 global using Data.Entities;

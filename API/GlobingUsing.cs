@@ -1,8 +1,8 @@
 ﻿global using Core;
 global using Core.BaseResponse;
 global using Core.Features.Department.Queries.Models;
-global using Core.Features.Students.Commands.Models;
-global using Core.Features.Students.Queries.Models;
+global using Core.Features.Students.Commands.Requests;
+global using Core.Features.Students.Queries.Requests;
 global using Core.Middleware;
 global using Data.AppMetaData;
 global using Infrastructure;

@@ -1,4 +1,4 @@
-﻿namespace Core.Features.Students.Queries.Models;
+﻿namespace Core.Features.Students.Queries.Requests;
 
 public class GetSingleStudentQuery : IRequest<GenericBaseResponse<GetSingleStudentResponse>>
 {
