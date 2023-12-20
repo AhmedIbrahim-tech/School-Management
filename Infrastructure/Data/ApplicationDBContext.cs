@@ -11,7 +11,10 @@ namespace Infrastructure.Data
         int, 
         IdentityUserClaim<int>, 
         IdentityUserRole<int>, 
-        IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
+        IdentityUserLogin<int>, 
+        IdentityRoleClaim<int>, 
+        IdentityUserToken<int>
+        >
     {
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options)
         {

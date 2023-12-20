@@ -20,9 +20,20 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\Authentication\Queries\Validations\" />
     <Folder Include="Features\Department\Commands\Handlers\" />
     <Folder Include="Features\Department\Commands\Models\" />
     <Folder Include="Features\Department\Commands\Validations\" />
+    <Folder Include="Features\Authentication\Commands\Handlers\" />
+    <Folder Include="Features\Authentication\Commands\Requests\" />
+    <Folder Include="Features\Authentication\Commands\Validations\" />
+    <Folder Include="Features\Authentication\Queries\Handlers\" />
+    <Folder Include="Features\Authentication\Queries\Requests\" />
+    <Folder Include="Features\Authentication\Queries\Responses\" />
+    <Folder Include="Features\ApplicationUser\Commands\Handlers\" />
+    <Folder Include="Features\ApplicationUser\Queries\Handlers\" />
+    <Folder Include="Features\ApplicationUser\Queries\Requests\" />
+    <Folder Include="Features\ApplicationUser\Queries\Responses\" />
     <Folder Include="Features\Template\Commands\Handlers\" />
     <Folder Include="Features\Template\Commands\Requests\" />
     <Folder Include="Features\Template\Commands\Validations\" />

@@ -22,13 +22,13 @@ public class EditStudentValidator : AbstractValidator<EditStudentCommand>
     {
         RuleFor(x => x.NameEn)
             .NotEmpty().WithMessage("{PropertyName} : " + _stringLocalizer[SharedResourcesKeys.NotEmpty])
-            .NotNull().WithMessage("{PropertyValue} : " + _stringLocalizer[SharedResourcesKeys.NotNull])
+            .NotNull().WithMessage("{PropertyValue} : " + _stringLocalizer[SharedResourcesKeys.Required])
             .MaximumLength(250).WithMessage("Max Length 250");
 
 
         RuleFor(x => x.Address)
             .NotEmpty().WithMessage("{PropertyName} : " + _stringLocalizer[SharedResourcesKeys.NotEmpty])
-            .NotNull().WithMessage("{PropertyValue} : " + _stringLocalizer[SharedResourcesKeys.NotNull])
+            .NotNull().WithMessage("{PropertyValue} : " + _stringLocalizer[SharedResourcesKeys.Required])
             .MaximumLength(250).WithMessage("Max Length 250");
 
     }

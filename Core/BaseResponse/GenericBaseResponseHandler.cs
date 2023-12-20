@@ -25,7 +25,7 @@ public class GenericBaseResponseHandler
         {
             StatusCode = HttpStatusCode.OK,
             Succeeded = true,
-            Message = _stringLocalizer[SharedResourcesKeys.Completed],
+            Message = _stringLocalizer[SharedResourcesKeys.Success],
             Data = entity,
             Meta = Meta
         };
@@ -37,7 +37,7 @@ public class GenericBaseResponseHandler
         {
             StatusCode = HttpStatusCode.Unauthorized,
             Succeeded = true,
-            Message = _stringLocalizer[SharedResourcesKeys.Unauthorized]
+            Message = _stringLocalizer[SharedResourcesKeys.UnAuthorized]
         };
     }
     public GenericBaseResponse<T> BadRequest<T>(string Message = null)
@@ -60,15 +60,15 @@ public class GenericBaseResponseHandler
         };
     }
 
-    public GenericBaseResponse<T> AlreadyExit<T>(string Message = null)
-    {
-        return new GenericBaseResponse<T>()
-        {
-            StatusCode = HttpStatusCode.OK,
-            Succeeded = false,
-            Message = Message == null ? _stringLocalizer[SharedResourcesKeys.AlreadyExit] : Message
-        };
-    }
+    //public GenericBaseResponse<T> AlreadyExit<T>(string Message = null)
+    //{
+    //    return new GenericBaseResponse<T>()
+    //    {
+    //        StatusCode = HttpStatusCode.OK,
+    //        Succeeded = false,
+    //        Message = Message == null ? _stringLocalizer[SharedResourcesKeys.AlreadyExit] : Message
+    //    };
+    //}
 
     public GenericBaseResponse<T> NotFound<T>(string message = null)
     {
