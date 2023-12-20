@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
 namespace Data.Entities.Identities;
-public class User : IdentityUser
+public class User : IdentityUser<int> // Add [int] in this way To Convert [Id] of IdentityUser to int
 {
     //public User()
     //{

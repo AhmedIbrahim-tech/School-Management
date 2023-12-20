@@ -1,10 +1,17 @@
 ﻿
 using Data.Entities.Identities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Infrastructure.Data
 {
-    public class ApplicationDBContext : IdentityDbContext<User>
+    public class ApplicationDBContext : IdentityDbContext<
+        User, 
+        IdentityRole<int>, 
+        int, 
+        IdentityUserClaim<int>, 
+        IdentityUserRole<int>, 
+        IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options)
         {

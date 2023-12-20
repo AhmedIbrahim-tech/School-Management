@@ -365,3 +365,8 @@ FodyWeavers.xsd
 /Data/Interface/IRepository/IStudentRepository.cs
 /Data/Interface/IRepository/IStudentRepository.cs
 /Data/Interface/IRepository/IStudentRepository.cs
+/Core/Features/Template/Queries/Handlers/FileName.cs
+/Core/Features/Template/Queries/Requests/FileName.cs
+/Core/Features/Template/Queries/Responses/FileName.cs
+/Core/Features/Template/Commands/Requests/FileName.cs
+/Core/Features/Template/Commands/Handlers/FileName.cs

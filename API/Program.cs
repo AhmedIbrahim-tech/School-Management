@@ -19,7 +19,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(option =>
 
 #region Dependency Injection
 
-builder.Services.AddInfrastructureDependencies().AddServicesDependencies().AddCoreDependencies();
+builder.Services.AddInfrastructureDependencies().AddServicesDependencies().AddCoreDependencies().AddServiceRegisteration();
 
 #endregion
 
