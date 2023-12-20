@@ -10,6 +10,8 @@ public static class ModuleServicesDependencies
     {
         services.AddTransient<IStudentServices, StudentServices>();
         services.AddTransient<IDepartmentServices, DepartmentServices>();
+        services.AddTransient<IApplicationUserService, ApplicationUserService>();
+
         return services;
     }
 }

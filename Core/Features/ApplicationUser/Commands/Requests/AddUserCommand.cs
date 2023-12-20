@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Core.Features.ApplicationUser.Commands.Requests
 {
-    public class AddUserCommand : IRequest<GenericBaseResponse<int>>
+    public class AddUserCommand : IRequest<GenericBaseResponse<string>>
     {
         public string FullName { get; set; }
         public string UserName { get; set; }

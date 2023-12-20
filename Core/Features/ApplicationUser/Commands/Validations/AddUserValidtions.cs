@@ -12,6 +12,7 @@ namespace Core.Features.ApplicationUser.Commands.Validations
         #region Fields
         private readonly IStringLocalizer<SharedResources> _localizer;
         #endregion
+
         #region Constructors
         public AddUserValidtions(IStringLocalizer<SharedResources> localizer)
         {
@@ -20,7 +21,6 @@ namespace Core.Features.ApplicationUser.Commands.Validations
             ApplyCustomValidationsRules();
         }
         #endregion
-
 
         #region Handle Functions
         public void ApplyValidationsRules()
