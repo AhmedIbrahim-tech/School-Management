@@ -21,6 +21,7 @@ namespace Services.Services
         private readonly ApplicationDBContext _applicationDBContext;
         //private readonly IUrlHelper _urlHelper;
         #endregion
+
         #region Constructors
         public ApplicationUserService(UserManager<User> userManager,
                                       IHttpContextAccessor httpContextAccessor,
@@ -35,7 +36,10 @@ namespace Services.Services
             //_urlHelper = urlHelper;
         }
         #endregion
+
         #region Handle Functions
+        
+        #region Create User
         public async Task<string> AddUserAsync(User user, string password)
         {
             var trans = await _applicationDBContext.Database.BeginTransactionAsync();
@@ -56,7 +60,7 @@ namespace Services.Services
                 if (!createResult.Succeeded)
                     return string.Join(",", createResult.Errors.Select(x => x.Description).ToList());
 
-                await _userManager.AddToRoleAsync(user, "User");
+                //await _userManager.AddToRoleAsync(user, "User");
 
                 //Send Confirm Email
                 //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -76,7 +80,9 @@ namespace Services.Services
                 return "Failed";
             }
 
-        }
+        } 
+        #endregion
+    
         #endregion
     }
 }

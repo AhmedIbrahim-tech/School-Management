@@ -17,3 +17,4 @@ global using Services.Interface.IServices;
 global using System.Linq.Expressions;
 global using System.Net;
 global using System.Reflection;
+global using Core.Features.ApplicationUser.Queries.Responses;

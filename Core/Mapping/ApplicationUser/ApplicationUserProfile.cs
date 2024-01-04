@@ -15,7 +15,14 @@ public class ApplicationUserProfile : Profile
         // Create User
         CreateMap<AddUserCommand, User>();
 
+        // Edit User
+        //CreateMap<EditUserCommand, User>();
 
+        // Pagination User
+        CreateMap<User, GetUserPaginationReponse>();
+
+        //Get User by Id 
+        CreateMap<User, GetUserByIdResponse>();
     }
 
 }

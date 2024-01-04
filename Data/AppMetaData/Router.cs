@@ -6,7 +6,7 @@ public static class Router
     public const string root = "Api";
     public const string version = "v1";
     public const string Rule = root + "/" + version + "/";
-    public const string SingleRoute = "{id}";
+    public const string SignleRoute = "{id}";
     #endregion
 
     #region Student
@@ -16,10 +16,10 @@ public static class Router
 
         public const string List = Prefix + "List";
         public const string Pagination = Prefix + "Pagination";
-        public const string GetById = Prefix + "GetByID" + "/" + SingleRoute;
+        public const string GetById = Prefix + "GetByID" + "/" + SignleRoute;
         public const string Create = Prefix + "Create";
         public const string Edit = Prefix + "Edit";
-        public const string Delete = Prefix + "Delete" + "/" + SingleRoute;
+        public const string Delete = Prefix + "Delete" + "/" + SignleRoute;
 
     }
 
@@ -32,8 +32,21 @@ public static class Router
         public const string GetById = Prefix + "GetByID";
         public const string Create = Prefix + "Create";
         public const string Edit = Prefix + "Edit";
-        public const string Delete = Prefix + "Delete" + "/" + SingleRoute;
+        public const string Delete = Prefix + "Delete" + "/" + SignleRoute;
 
+    }
+    #endregion
+
+    #region User
+    public static class User
+    {
+        public const string Prefix = Rule + "User";
+        public const string Create = Prefix + "/Create";
+        public const string Paginated = Prefix + "/Paginated";
+        public const string GetByID = Prefix + "/" + SignleRoute;
+        public const string Edit = Prefix + "/Edit";
+        public const string Delete = Prefix + "/{id}";
+        public const string ChangePassword = Prefix + "/Change-Password";
     }
     #endregion
 }
