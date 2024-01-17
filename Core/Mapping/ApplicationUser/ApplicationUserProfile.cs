@@ -16,7 +16,7 @@ public class ApplicationUserProfile : Profile
         CreateMap<AddUserCommand, User>();
 
         // Edit User
-        //CreateMap<EditUserCommand, User>();
+        CreateMap<EditUserCommand, User>();
 
         // Pagination User
         CreateMap<User, GetUserPaginationReponse>();
