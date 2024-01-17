@@ -370,5 +370,3 @@ FodyWeavers.xsd
 /Core/Features/Template/Queries/Responses/FileName.cs
 /Core/Features/Template/Commands/Requests/FileName.cs
 /Core/Features/Template/Commands/Handlers/FileName.cs
-/Core/Features/ApplicationUser/Queries
-/API/appsettings.json
