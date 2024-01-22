@@ -13,6 +13,7 @@ public static class ModuleInfrastructureDependencies
         services.AddTransient<IDepartmentRepository, DepartmentRepository>();
         services.AddTransient<IInstructorRepository, InstructorRepository>();
         services.AddTransient<ISubjectsRepository, SubjectsRepository>();
+        services.AddTransient<IRefreshTokenRepository, RefreshTokenRepository>();
 
         return services;
     }

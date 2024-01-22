@@ -235,7 +235,7 @@
     <value>Operation to send email failed.</value>
   </data>
   <data name="Success" xml:space="preserve">
-    <value>operation is done</value>
+    <value>Operation is Done</value>
   </data>
   <data name="TokenIsExpired" xml:space="preserve">
     <value>Token Is Expired</value>

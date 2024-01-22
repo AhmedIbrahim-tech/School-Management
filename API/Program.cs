@@ -19,7 +19,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(option =>
 
 #region Dependency Injection
 
-builder.Services.AddInfrastructureDependencies().AddServicesDependencies().AddCoreDependencies().AddServiceRegisteration();
+builder.Services.AddInfrastructureDependencies().AddServicesDependencies().AddCoreDependencies().AddServiceRegisteration(builder.Configuration);
 
 #endregion
 
@@ -71,7 +71,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+#region Authorize
+app.UseAuthentication();
+app.UseAuthorization(); 
+#endregion
 
 app.MapControllers();
 app.UseMiddleware<ErrorHandlerMiddleware>();

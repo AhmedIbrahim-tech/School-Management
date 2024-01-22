@@ -123,7 +123,7 @@ namespace Core.Features.ApplicationUser.Commands.Handlers
 
             //Change User Password
             var result = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
-            //var user1=await _userManager.HasPasswordAsync(user);
+            //var GetCruuentPass = await _userManager.HasPasswordAsync(user);
             //await _userManager.RemovePasswordAsync(user);
             //await _userManager.AddPasswordAsync(user, request.NewPassword);
 

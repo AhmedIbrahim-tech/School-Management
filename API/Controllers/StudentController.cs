@@ -1,6 +1,9 @@
-﻿namespace API.Controllers
+﻿using Microsoft.AspNetCore.Authorization;
+
+namespace API.Controllers
 {
     [ApiController]
+    [Authorize]
     public class StudentController : GernericBaseController
     {
         #region Handler Function
