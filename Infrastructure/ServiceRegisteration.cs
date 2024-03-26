@@ -50,7 +50,6 @@ public static class ServiceRegisteration
 
         #endregion
 
-
         #region 3). configuration of JWT
         services.AddAuthentication(x =>
         {
@@ -74,8 +73,7 @@ public static class ServiceRegisteration
         });
         #endregion
 
-
-        #region Scheme of Swagger
+        #region 4). Scheme of Swagger
         //Swagger Gn
         services.AddSwaggerGen(c =>
         {

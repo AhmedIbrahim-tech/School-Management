@@ -1,4 +1,5 @@
 ﻿using Core.Features.Department.Queries.Models;
+using Data.Entities.Models;
 using Services.Interface;
 
 namespace Core.Features.Department.Queries.Handlers;

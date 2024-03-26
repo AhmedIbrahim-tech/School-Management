@@ -1,4 +1,6 @@
-﻿namespace Infrastructure.Data.Configurations;
+﻿using Data.Entities.Models;
+
+namespace Infrastructure.Data.Configurations;
 
 public class Ins_SubjectConfigurations : IEntityTypeConfiguration<Ins_Subject>
 {

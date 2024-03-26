@@ -1,4 +1,6 @@
-﻿namespace Services.Interface;
+﻿using Data.Entities.Models;
+
+namespace Services.Interface;
 
 public interface IDepartmentServices
 {

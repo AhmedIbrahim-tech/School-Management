@@ -1,4 +1,6 @@
-﻿namespace Services.Interface.IServices;
+﻿using Data.Entities.Models;
+
+namespace Services.Interface.IServices;
 
 public interface IStudentServices
 {

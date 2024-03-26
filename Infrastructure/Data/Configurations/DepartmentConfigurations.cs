@@ -1,4 +1,6 @@
-﻿namespace Infrastructure.Data.Configurations;
+﻿using Data.Entities.Models;
+
+namespace Infrastructure.Data.Configurations;
 
 public class DepartmentConfigurations : IEntityTypeConfiguration<Department>
 {

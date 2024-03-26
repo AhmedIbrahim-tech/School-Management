@@ -1,11 +1,13 @@
-﻿namespace Core.Mapping.Department;
+﻿using Data.Entities.Models;
+
+namespace Core.Mapping.Department;
 
 public class DepartmentProfile : Profile
 {
     public DepartmentProfile()
     {
         //Get Single
-        CreateMap<Data.Entities.Department, GetSingleDepartmentResponse>()
+        CreateMap<Data.Entities.Models.Department, GetSingleDepartmentResponse>()
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.GeneralLocalize(src.DNameAr, src.DNameEn)))
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.DID))
             .ForMember(dest => dest.ManagerName, opt => opt.MapFrom(src => src.Instructor.GeneralLocalize(src.Instructor.ENameAr, src.Instructor.ENameEn)))

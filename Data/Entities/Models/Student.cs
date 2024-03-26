@@ -1,4 +1,4 @@
-﻿namespace Data.Entities;
+﻿namespace Data.Entities.Models;
 
 
 public class Student : GeneralLocalizeEntity

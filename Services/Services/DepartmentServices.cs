@@ -1,4 +1,5 @@
-﻿using Infrastructure.Persistence;
+﻿using Data.Entities.Models;
+using Infrastructure.Persistence;
 using Services.Interface;
 
 namespace Services.Services;

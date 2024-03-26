@@ -1,4 +1,6 @@
-﻿namespace Infrastructure.Repository;
+﻿using Data.Entities.Models;
+
+namespace Infrastructure.Repository;
 
 public class DepartmentRepository : GenericRepositoryAsync<Department>, IDepartmentRepository
 {

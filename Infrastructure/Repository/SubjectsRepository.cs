@@ -1,4 +1,6 @@
-﻿namespace Infrastructure.Repository;
+﻿using Data.Entities.Models;
+
+namespace Infrastructure.Repository;
 
 public class SubjectsRepository : GenericRepositoryAsync<Subject>, ISubjectsRepository
 {

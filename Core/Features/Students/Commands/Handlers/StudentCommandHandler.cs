@@ -1,4 +1,6 @@
-﻿namespace Core.Features.Students.Commands.Handlers;
+﻿using Data.Entities.Models;
+
+namespace Core.Features.Students.Commands.Handlers;
 
 public class StudentCommandHandler : GenericBaseResponseHandler,
     IRequestHandler<AddStudentCommand, GenericBaseResponse<int>>,

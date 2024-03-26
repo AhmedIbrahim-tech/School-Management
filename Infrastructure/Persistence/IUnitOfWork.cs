@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Data.Entities.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.Persistence;
 
