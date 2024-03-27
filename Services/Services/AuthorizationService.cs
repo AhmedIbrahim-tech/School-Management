@@ -15,6 +15,7 @@ namespace Services.Services
         private readonly UserManager<User> _userManager;
         private readonly ApplicationDBContext _dbContext;
         #endregion
+
         #region Constructors
         public AuthorizationService(RoleManager<Role> roleManager,
                                     UserManager<User> userManager,
@@ -27,6 +28,7 @@ namespace Services.Services
 
 
         #endregion
+
         #region handle Functions
         public async Task<string> AddRoleAsync(string roleName)
         {

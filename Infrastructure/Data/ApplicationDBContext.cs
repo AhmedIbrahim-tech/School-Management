@@ -20,12 +20,13 @@ namespace Infrastructure.Data
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options)
         {
         }
-
+        public DbSet<User> User { get; set; }
         public DbSet<Department> departments { get; set; }
         public DbSet<Student> students { get; set; }
         public DbSet<DepartmetSubject> departmetSubjects { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<StudentSubject> studentSubjects { get; set; }
+        public DbSet<UserRefreshToken> UserRefreshToken { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -24,8 +24,6 @@
     <Folder Include="Features\Department\Commands\Handlers\" />
     <Folder Include="Features\Department\Commands\Models\" />
     <Folder Include="Features\Department\Commands\Validations\" />
-    <Folder Include="Features\Authentication\Queries\Handlers\" />
-    <Folder Include="Features\Authentication\Queries\Requests\" />
     <Folder Include="Features\Authentication\Queries\Responses\" />
     <Folder Include="Features\ApplicationUser\Commands\Handlers\" />
     <Folder Include="Features\Template\Commands\Handlers\" />

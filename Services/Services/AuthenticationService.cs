@@ -47,7 +47,6 @@ public class AuthenticationService : IAuthenticationService
 
     #region Handle Functions
 
-
     #region GET : JWT Token
    
     #region JWT Token
@@ -369,7 +368,6 @@ public class AuthenticationService : IAuthenticationService
     #endregion
 
     #endregion
-
 
     #endregion
 }

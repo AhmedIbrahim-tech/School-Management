@@ -60,7 +60,7 @@ namespace Services.Services
                 if (!createResult.Succeeded)
                     return string.Join(",", createResult.Errors.Select(x => x.Description).ToList());
 
-                //await _userManager.AddToRoleAsync(user, "User");
+                await _userManager.AddToRoleAsync(user, "User");
 
                 //Send Confirm Email
                 //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
