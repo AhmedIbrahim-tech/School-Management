@@ -1,3 +1,7 @@
+using Data.Entities.Identities;
+using Infrastructure.Context.DataSeed;
+using Microsoft.AspNetCore.Identity;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -62,6 +66,18 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+#region Create Data Seed
+
+using (var Seed = app.Services.CreateScope())
+{
+    var userManager = Seed.ServiceProvider.GetRequiredService<UserManager<User>>();
+    var roleManager = Seed.ServiceProvider.GetRequiredService<RoleManager<Role>>();
+    await RoleSeeder.SeedAsync(roleManager);
+    await UserSeeder.SeedAsync(userManager);
+}
+
+#endregion
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -69,17 +85,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
-#region Authorize
-app.UseAuthentication();
-app.UseAuthorization(); 
-#endregion
-
-app.MapControllers();
-app.UseMiddleware<ErrorHandlerMiddleware>();
-
-app.UseCors("AllowAll");
 
 #region Localization Middle ware
 
@@ -87,6 +92,19 @@ var option = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
 app.UseRequestLocalization(option.Value);
 
 #endregion
+
+app.UseMiddleware<ErrorHandlerMiddleware>();
+
+app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
+
+#region Authorize
+app.UseAuthentication();
+app.UseAuthorization();
+#endregion
+
+app.MapControllers();
 
 #region Update Database
 

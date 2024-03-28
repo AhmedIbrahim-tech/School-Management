@@ -6,7 +6,7 @@ global using Core.Features.Students.Queries.Requests;
 global using Core.Middleware;
 global using Data.AppMetaData;
 global using Infrastructure;
-global using Infrastructure.Data;
+global using Infrastructure.Context;
 global using MediatR;
 global using Microsoft.AspNetCore.Localization;
 global using Microsoft.AspNetCore.Mvc;
@@ -15,3 +15,9 @@ global using Microsoft.Extensions.Options;
 global using Services;
 global using System.Globalization;
 global using System.Net;
+global using Core.Features.Authorization.Commands.Requests;
+global using Core.Features.ApplicationUser.Commands.Requests;
+global using Core.Features.ApplicationUser.Queries.Requests;
+global using Core.Features.Authentication.Commands.Requests;
+global using Core.Features.Authentication.Queries.Requests;
+

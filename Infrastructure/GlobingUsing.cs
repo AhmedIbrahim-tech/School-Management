@@ -1,5 +1,5 @@
 ﻿global using Data.Entities;
-global using Infrastructure.Data;
+global using Infrastructure.Context;
 global using Infrastructure.GenericRepository;
 global using Infrastructure.Interface;
 global using Infrastructure.Repository;

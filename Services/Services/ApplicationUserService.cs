@@ -1,5 +1,5 @@
 ﻿using Data.Entities.Identities;
-using Infrastructure.Data;
+using Infrastructure.Context;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +27,7 @@ namespace Services.Services
                                       IHttpContextAccessor httpContextAccessor,
                                       //IEmailsService emailsService,
                                       ApplicationDBContext applicationDBContext)
-                                      //IUrlHelper urlHelper)
+        //IUrlHelper urlHelper)
         {
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
@@ -38,7 +38,7 @@ namespace Services.Services
         #endregion
 
         #region Handle Functions
-        
+
         #region Create User
         public async Task<string> AddUserAsync(User user, string password)
         {
@@ -54,13 +54,23 @@ namespace Services.Services
                 var userByUserName = await _userManager.FindByNameAsync(user.UserName);
                 //username is Exist
                 if (userByUserName != null) return "UserNameIsExist";
+
                 //Create
                 var createResult = await _userManager.CreateAsync(user, password);
+
                 //Failed
                 if (!createResult.Succeeded)
                     return string.Join(",", createResult.Errors.Select(x => x.Description).ToList());
 
-                await _userManager.AddToRoleAsync(user, "User");
+                var ListofUsers = await _userManager.Users.ToListAsync();
+                if (ListofUsers.Count >= 0)
+                {
+                    await _userManager.AddToRoleAsync(user, "User");
+                }
+                else
+                {
+                    await _userManager.AddToRoleAsync(user, "Admin");
+                }
 
                 //Send Confirm Email
                 //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -80,9 +90,9 @@ namespace Services.Services
                 return "Failed";
             }
 
-        } 
+        }
         #endregion
-    
+
         #endregion
     }
 }

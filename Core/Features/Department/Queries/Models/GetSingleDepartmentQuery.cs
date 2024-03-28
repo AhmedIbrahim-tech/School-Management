@@ -1,6 +1,4 @@
-﻿using Core.BaseResponse;
-
-namespace Core.Features.Department.Queries.Models;
+﻿namespace Core.Features.Department.Queries.Models;
 
 public class GetSingleDepartmentQuery : IRequest<GenericBaseResponse<GetSingleDepartmentResponse>>
 {

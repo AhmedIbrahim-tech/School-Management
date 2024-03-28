@@ -1,6 +1,6 @@
 ﻿using Data.Entities.Models;
 
-namespace Infrastructure.Data.Configurations;
+namespace Infrastructure.Context.Configurations;
 
 public class Ins_SubjectConfigurations : IEntityTypeConfiguration<Ins_Subject>
 {

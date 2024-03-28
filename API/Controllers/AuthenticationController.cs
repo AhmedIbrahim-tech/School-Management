@@ -1,7 +1,4 @@
-﻿using Core.Features.Authentication.Commands.Requests;
-using Core.Features.Authentication.Queries.Requests;
-
-namespace API.Controllers;
+﻿namespace API.Controllers;
 
 [ApiController]
 public class AuthenticationController : GernericBaseController

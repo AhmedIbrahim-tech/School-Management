@@ -4,11 +4,11 @@ using Data.Entities.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-namespace Infrastructure.Data
+namespace Infrastructure.Context
 {
     public class ApplicationDBContext : IdentityDbContext<
         User, 
-        IdentityRole<int>, 
+        Role, 
         int, 
         IdentityUserClaim<int>, 
         IdentityUserRole<int>, 

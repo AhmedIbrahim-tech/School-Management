@@ -39,6 +39,8 @@ namespace Core.Features.Authentication.Commands.Handlers
 
         #endregion
 
+        #region Handle Functions
+
         #region Sign in
         public async Task<GenericBaseResponse<JwtAuthResult>> Handle(SignInCommand request, CancellationToken cancellationToken)
         {
@@ -49,17 +51,17 @@ namespace Core.Features.Authentication.Commands.Handlers
             if (user == null) return BadRequest<JwtAuthResult>(_stringLocalizer[SharedResourcesKeys.UserNameIsNotExist]);
 
             //try To Sign in 
-            var signInResult = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
+            var signInResult = _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 
             //if Failed Return Passord is wrong
-            if (!signInResult.Succeeded) return BadRequest<JwtAuthResult>(_stringLocalizer[SharedResourcesKeys.PasswordNotCorrect]);
+            if (!signInResult.IsCompletedSuccessfully) return BadRequest<JwtAuthResult>(_stringLocalizer[SharedResourcesKeys.PasswordNotCorrect]);
 
             //confirm email
-            if (!user.EmailConfirmed) return BadRequest<JwtAuthResult>(_stringLocalizer[SharedResourcesKeys.EmailNotConfirmed]);
+            //if (!user.EmailConfirmed) return BadRequest<JwtAuthResult>(_stringLocalizer[SharedResourcesKeys.EmailNotConfirmed]);
 
             //Generate Token
             var result = await _authenticationService.GetJWTToken(user);
-            
+
             //return Token 
             return Success(result);
         }
@@ -86,6 +88,8 @@ namespace Core.Features.Authentication.Commands.Handlers
             var result = await _authenticationService.GetRefreshToken(user, jwtToken, expiryDate, request.RefreshToken);
             return Success(result);
         }
+
+        #endregion 
 
         #endregion
     }

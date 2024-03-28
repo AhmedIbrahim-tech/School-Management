@@ -1,14 +1,7 @@
-﻿using Azure;
-using Core.Features.ApplicationUser.Commands.Requests;
+﻿using Core.Features.ApplicationUser.Commands.Requests;
 using Data.Entities.Identities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Services.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.Features.ApplicationUser.Commands.Handlers
 {
@@ -52,9 +45,13 @@ namespace Core.Features.ApplicationUser.Commands.Handlers
         #region Create User
         public async Task<GenericBaseResponse<string>> Handle(AddUserCommand request, CancellationToken cancellationToken)
         {
+            // Mapping            
             var identityUser = _mapper.Map<User>(request);
+            
             //Create
             var createResult = await _applicationUserService.AddUserAsync(identityUser, request.Password);
+            
+            // Result
             switch (createResult)
             {
                 case "EmailIsExist": return BadRequest<string>(_sharedResources[SharedResourcesKeys.EmailIsExist]);

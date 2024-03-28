@@ -1,7 +1,7 @@
 ﻿using Data.Entities.Authentication;
 using Data.Entities.Identities;
 using Data.Helpers;
-using Infrastructure.Data;
+using Infrastructure.Context;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Services.Interface;
