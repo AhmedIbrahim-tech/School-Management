@@ -40,22 +40,27 @@ public class AuthorizationService : IAuthorizationService
     }
     #endregion
 
-
-
-    #region MyRegion
-
+    #region Edit Role
     public async Task<string> EditRoleAsync(EditRoleRequest request)
     {
         //check role is exist or not
         var role = await _roleManager.FindByIdAsync(request.Id.ToString());
         if (role == null)
             return "notFound";
+
+        // Update Role
         role.Name = request.Name;
         var result = await _roleManager.UpdateAsync(role);
         if (result.Succeeded) return "Success";
+
+        // Return list of error if not Succeeded
         var errors = string.Join("-", result.Errors);
         return errors;
     }
+
+    #endregion
+
+    #region Delete Role
 
     public async Task<string> DeleteRoleAsync(int roleId)
     {
@@ -74,17 +79,14 @@ public class AuthorizationService : IAuthorizationService
         return errors;
     }
 
-    public async Task<bool> IsRoleExistById(int roleId)
-    {
-        var role = await _roleManager.FindByIdAsync(roleId.ToString());
-        if (role == null) return false;
-        else return true;
-    }
+    #endregion
 
-    public async Task<List<Role>> GetRolesList()
-    {
-        return await _roleManager.Roles.ToListAsync();
-    }
+    #region MyRegion
+
+
+
+
+
 
     public async Task<Role> GetRoleById(int id)
     {
@@ -211,6 +213,14 @@ public class AuthorizationService : IAuthorizationService
   
     #region Helper
 
+    #region Get List of Roles
+    public async Task<List<Role>> GetRolesList()
+    {
+        return await _roleManager.Roles.ToListAsync();
+    }
+
+    #endregion
+
     #region Check Role is Exists
     public async Task<bool> IsRoleExistByName(string roleName)
     {
@@ -221,6 +231,17 @@ public class AuthorizationService : IAuthorizationService
     }
 
     #endregion
+
+    #region Check Role Is Exist By-Id
+    public async Task<bool> IsRoleExistById(int roleId)
+    {
+        var role = await _roleManager.FindByIdAsync(roleId.ToString());
+        if (role == null) return false;
+        else return true;
+    }
+
+    #endregion
+    
 
     #endregion
 

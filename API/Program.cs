@@ -1,4 +1,5 @@
 using Data.Entities.Identities;
+using Infrastructure.Context;
 using Infrastructure.Context.DataSeed;
 using Microsoft.AspNetCore.Identity;
 
@@ -14,11 +15,15 @@ builder.Services.AddSwaggerGen();
 
 #region Connection Database
 
+//builder.Services.AddDbContext<ApplicationDBContext>(option =>
+//    option.UseSqlServer(
+//        builder.Configuration.GetConnectionString("DefaultConnection"),
+//            b => b.MigrationsAssembly(typeof(ApplicationDBContext).Assembly.FullName)));
+//Connection To SQL Server
 builder.Services.AddDbContext<ApplicationDBContext>(option =>
-    option.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-            b => b.MigrationsAssembly(typeof(ApplicationDBContext).Assembly.FullName)));
-
+{
+    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 #endregion
 
 #region Dependency Injection
@@ -70,10 +75,10 @@ var app = builder.Build();
 
 using (var Seed = app.Services.CreateScope())
 {
-    var userManager = Seed.ServiceProvider.GetRequiredService<UserManager<User>>();
     var roleManager = Seed.ServiceProvider.GetRequiredService<RoleManager<Role>>();
-    await RoleSeeder.SeedAsync(roleManager);
+    var userManager = Seed.ServiceProvider.GetRequiredService<UserManager<User>>();
     await UserSeeder.SeedAsync(userManager);
+    await RoleSeeder.SeedAsync(roleManager);
 }
 
 #endregion

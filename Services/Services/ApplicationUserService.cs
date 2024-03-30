@@ -63,14 +63,9 @@ namespace Services.Services
                     return string.Join(",", createResult.Errors.Select(x => x.Description).ToList());
 
                 var ListofUsers = await _userManager.Users.ToListAsync();
-                if (ListofUsers.Count >= 0)
-                {
-                    await _userManager.AddToRoleAsync(user, "User");
-                }
-                else
-                {
-                    await _userManager.AddToRoleAsync(user, "Admin");
-                }
+                
+                await _userManager.AddToRoleAsync(user, "User");
+
 
                 //Send Confirm Email
                 //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
