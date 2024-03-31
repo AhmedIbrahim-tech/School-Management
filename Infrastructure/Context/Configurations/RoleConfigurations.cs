@@ -8,8 +8,8 @@ public class RoleConfigurations : IEntityTypeConfiguration<Role>
     public void Configure(EntityTypeBuilder<Role> builder)
     {
         builder.HasData(
-            new Role { Name = "Admin" },
-                 new Role { Name = "User" }
+            new Role { Id = 1, Name = "Admin" },
+                 new Role { Id = 2, Name = "User" }
             );
     }
 }

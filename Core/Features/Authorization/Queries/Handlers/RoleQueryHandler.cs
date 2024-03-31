@@ -14,6 +14,7 @@ public class RoleQueryHandler : GenericBaseResponseHandler,
     private readonly IStringLocalizer<SharedResources> _stringLocalizer;
     private readonly UserManager<User> _userManager;
     #endregion
+
     #region Constructors
     public RoleQueryHandler(IStringLocalizer<SharedResources> stringLocalizer,
                             IAuthorizationService authorizationService,
@@ -26,7 +27,11 @@ public class RoleQueryHandler : GenericBaseResponseHandler,
         _userManager = userManager;
     }
     #endregion
+
+
     #region Handle Functions
+    
+    #region Get List of Roles
     public async Task<GenericBaseResponse<List<GetRolesListResult>>> Handle(GetRolesListQuery request, CancellationToken cancellationToken)
     {
         var roles = await _authorizationService.GetRolesList();
@@ -34,6 +39,9 @@ public class RoleQueryHandler : GenericBaseResponseHandler,
         return Success(result);
     }
 
+    #endregion
+
+    #region Get Role by Id
     public async Task<GenericBaseResponse<GetRoleByIdResult>> Handle(GetRoleByIdQuery request, CancellationToken cancellationToken)
     {
         var role = await _authorizationService.GetRoleById(request.Id);
@@ -42,6 +50,10 @@ public class RoleQueryHandler : GenericBaseResponseHandler,
         return Success(result);
     }
 
+
+    #endregion
+
+    #region Manage User Roles
     public async Task<GenericBaseResponse<ManageUserRolesResult>> Handle(ManageUserRolesQuery request, CancellationToken cancellationToken)
     {
         var user = await _userManager.FindByIdAsync(request.UserId.ToString());
@@ -49,5 +61,8 @@ public class RoleQueryHandler : GenericBaseResponseHandler,
         var result = await _authorizationService.ManageUserRolesData(user);
         return Success(result);
     }
+
+    #endregion    
+    
     #endregion
 }
