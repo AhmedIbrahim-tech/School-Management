@@ -15,15 +15,10 @@ builder.Services.AddSwaggerGen();
 
 #region Connection Database
 
-//builder.Services.AddDbContext<ApplicationDBContext>(option =>
-//    option.UseSqlServer(
-//        builder.Configuration.GetConnectionString("DefaultConnection"),
-//            b => b.MigrationsAssembly(typeof(ApplicationDBContext).Assembly.FullName)));
-//Connection To SQL Server
 builder.Services.AddDbContext<ApplicationDBContext>(option =>
-{
-    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
+    option.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+            b => b.MigrationsAssembly(typeof(ApplicationDBContext).Assembly.FullName)));
 #endregion
 
 #region Dependency Injection
@@ -71,18 +66,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-#region Create Data Seed
-
-using (var Seed = app.Services.CreateScope())
-{
-    var roleManager = Seed.ServiceProvider.GetRequiredService<RoleManager<Role>>();
-    var userManager = Seed.ServiceProvider.GetRequiredService<UserManager<User>>();
-    await UserSeeder.SeedAsync(userManager);
-    await RoleSeeder.SeedAsync(roleManager);
-}
-
-#endregion
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -129,5 +112,18 @@ catch (Exception ex)
 }
 
 #endregion
+
+#region Create Data Seed
+
+using (var Seed = app.Services.CreateScope())
+{
+    var roleManager = Seed.ServiceProvider.GetRequiredService<RoleManager<Role>>();
+    var userManager = Seed.ServiceProvider.GetRequiredService<UserManager<User>>();
+    await RoleSeeder.SeedAsync(roleManager);
+    await UserSeeder.SeedAsync(userManager);
+}
+
+#endregion
+
 
 app.Run();

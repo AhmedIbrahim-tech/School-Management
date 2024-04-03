@@ -1,4 +1,5 @@
 ﻿
+using Azure;
 using Core.Features.Authentication.Commands.Requests;
 using Data.Entities.Authentication;
 using Data.Entities.Identities;
@@ -8,10 +9,10 @@ using Services.Interface;
 namespace Core.Features.Authentication.Commands.Handlers
 {
     public class AuthenticationCommandHandler : GenericBaseResponseHandler,
-        IRequestHandler<SignInCommand, GenericBaseResponse<JwtAuthResult>>
-    //IRequestHandler<RefreshTokenCommand, GenericBaseResponse<JwtAuthResult>>
-    //IRequestHandler<SendResetPasswordCommand, GenericBaseResponse<string>>,
-    //IRequestHandler<ResetPasswordCommand, GenericBaseResponse<string>>
+        IRequestHandler<SignInCommand, GenericBaseResponse<JwtAuthResult>>,
+        IRequestHandler<RefreshTokenCommand, GenericBaseResponse<JwtAuthResult>>,
+        IRequestHandler<SendResetPasswordCommand, GenericBaseResponse<string>>,
+        IRequestHandler<ResetPasswordCommand, GenericBaseResponse<string>>
 
     {
         #region Fields
@@ -89,7 +90,33 @@ namespace Core.Features.Authentication.Commands.Handlers
             return Success(result);
         }
 
-        #endregion 
+        #endregion
+
+
+        public async Task<GenericBaseResponse<string>> Handle(SendResetPasswordCommand request, CancellationToken cancellationToken)
+        {
+            var result = await _authenticationService.SendResetPasswordCode(request.Email);
+            switch (result)
+            {
+                case "UserNotFound": return BadRequest<string>(_stringLocalizer[SharedResourcesKeys.UserIsNotFound]);
+                case "ErrorInUpdateUser": return BadRequest<string>(_stringLocalizer[SharedResourcesKeys.TryAgainInAnotherTime]);
+                case "Failed": return BadRequest<string>(_stringLocalizer[SharedResourcesKeys.TryAgainInAnotherTime]);
+                case "Success": return Success<string>("");
+                default: return BadRequest<string>(_stringLocalizer[SharedResourcesKeys.TryAgainInAnotherTime]);
+            }
+        }
+
+        public async Task<GenericBaseResponse<string>> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
+        {
+            var result = await _authenticationService.ResetPassword(request.Email, request.Password);
+            switch (result)
+            {
+                case "UserNotFound": return BadRequest<string>(_stringLocalizer[SharedResourcesKeys.UserIsNotFound]);
+                case "Failed": return BadRequest<string>(_stringLocalizer[SharedResourcesKeys.InvaildCode]);
+                case "Success": return Success<string>("");
+                default: return BadRequest<string>(_stringLocalizer[SharedResourcesKeys.InvaildCode]);
+            }
+        }
 
         #endregion
     }
