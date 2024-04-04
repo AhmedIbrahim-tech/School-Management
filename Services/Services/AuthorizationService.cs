@@ -65,15 +65,17 @@ public class AuthorizationService : IAuthorizationService
         var role = await _roleManager.FindByIdAsync(request.Id.ToString());
         if (role == null)
             return "notFound";
+
+        // Update Role
         role.Name = request.Name;
         var result = await _roleManager.UpdateAsync(role);
         if (result.Succeeded) return "Success";
+
+        // Return list of error if not Succeeded
         var errors = string.Join("-", result.Errors);
         return errors;
     }
     #endregion
-
-    #region Delete Role
 
     public async Task<string> DeleteRoleAsync(int roleId)
     {
@@ -95,8 +97,12 @@ public class AuthorizationService : IAuthorizationService
         return errors;
     }
 
-    #endregion
-
+    public async Task<bool> IsRoleExistById(int roleId)
+    {
+        var role = await _roleManager.FindByIdAsync(roleId.ToString());
+        if (role == null) return false;
+        else return true;
+    }
 
 
     #region MyRegion
@@ -221,8 +227,7 @@ public class AuthorizationService : IAuthorizationService
   
     #region Helper
 
-
-    #region Check Role is Exists by Name
+    #region Check Role is Exists
     public async Task<bool> IsRoleExistByName(string roleName)
     {
         //var role=await _roleManager.FindByNameAsync(roleName);
@@ -232,18 +237,6 @@ public class AuthorizationService : IAuthorizationService
     }
 
     #endregion
-
-    #region Check Role is Exists by ID
-
-    public async Task<bool> IsRoleExistById(int roleId)
-    {
-        var role = await _roleManager.FindByIdAsync(roleId.ToString());
-        if (role == null) return false;
-        else return true;
-    }
-
-    #endregion
-
 
     #endregion
 

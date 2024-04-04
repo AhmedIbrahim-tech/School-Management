@@ -85,37 +85,23 @@ public class AuthenticationService : IAuthenticationService
     #region 1) List of Claims
     public async Task<List<Claim>> GetClaims(User user)
     {
+        var roles = await _userManager.GetRolesAsync(user);
         var claims = new List<Claim>()
         {
-            new Claim(nameof(UserClaimModel.UserName),user.UserName ?? ""),
-            new Claim(nameof(UserClaimModel.Email),user.Email ?? ""),
-            new Claim(nameof(UserClaimModel.PhoneNumber), user.PhoneNumber ?? ""),
+            new Claim(ClaimTypes.Name,user.UserName),
+            new Claim(ClaimTypes.NameIdentifier,user.UserName),
+            new Claim(ClaimTypes.Email,user.Email),
+            new Claim(nameof(UserClaimModel.PhoneNumber), user.PhoneNumber),
             new Claim(nameof(UserClaimModel.Id), user.Id.ToString())
-
         };
+        foreach (var role in roles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role));
+        }
+        var userClaims = await _userManager.GetClaimsAsync(user);
+        claims.AddRange(userClaims);
         return claims;
-
     }
-
-    //public async Task<List<Claim>> GetClaims(User user)
-    //{
-    //    var roles = await _userManager.GetRolesAsync(user);
-    //    var claims = new List<Claim>()
-    //    {
-    //        new Claim(ClaimTypes.Name,user.UserName),
-    //        new Claim(ClaimTypes.NameIdentifier,user.UserName),
-    //        new Claim(ClaimTypes.Email,user.Email),
-    //        new Claim(nameof(UserClaimModel.PhoneNumber), user.PhoneNumber),
-    //        new Claim(nameof(UserClaimModel.Id), user.Id.ToString())
-    //    };
-    //    foreach (var role in roles)
-    //    {
-    //        claims.Add(new Claim(ClaimTypes.Role, role));
-    //    }
-    //    var userClaims = await _userManager.GetClaimsAsync(user);
-    //    claims.AddRange(userClaims);
-    //    return claims;
-    //} 
     #endregion
 
     #region 2). Generate JWT Token

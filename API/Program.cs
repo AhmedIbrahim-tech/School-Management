@@ -1,4 +1,5 @@
 using Data.Entities.Identities;
+using Infrastructure.Context;
 using Infrastructure.Context.DataSeed;
 using Microsoft.AspNetCore.Identity;
 
@@ -18,7 +19,6 @@ builder.Services.AddDbContext<ApplicationDBContext>(option =>
     option.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection"),
             b => b.MigrationsAssembly(typeof(ApplicationDBContext).Assembly.FullName)));
-
 #endregion
 
 #region Dependency Injection
@@ -67,11 +67,14 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 #region Create Data Seed
-//using var Seed = app.Services.CreateScope();
-//var userManager = Seed.ServiceProvider.GetRequiredService<UserManager<User>>();
-//var roleManager = Seed.ServiceProvider.GetRequiredService<RoleManager<Role>>();
-//await RoleSeeder.SeedAsync(roleManager);
-//await UserSeeder.SeedAsync(userManager);
+
+using (var Seed = app.Services.CreateScope())
+{
+    var userManager = Seed.ServiceProvider.GetRequiredService<UserManager<User>>();
+    var roleManager = Seed.ServiceProvider.GetRequiredService<RoleManager<Role>>();
+    await RoleSeeder.SeedAsync(roleManager);
+    await UserSeeder.SeedAsync(userManager);
+}
 
 #endregion
 
@@ -121,5 +124,18 @@ catch (Exception ex)
 }
 
 #endregion
+
+#region Create Data Seed
+
+using (var Seed = app.Services.CreateScope())
+{
+    var roleManager = Seed.ServiceProvider.GetRequiredService<RoleManager<Role>>();
+    var userManager = Seed.ServiceProvider.GetRequiredService<UserManager<User>>();
+    await RoleSeeder.SeedAsync(roleManager);
+    await UserSeeder.SeedAsync(userManager);
+}
+
+#endregion
+
 
 app.Run();

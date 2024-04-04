@@ -1,4 +1,6 @@
-﻿namespace Services.Interface;
+﻿
+
+namespace Services.Interface;
 
 public interface IAuthorizationService
 {

@@ -13,11 +13,14 @@ public static class RoleSeeder
 
             await _roleManager.CreateAsync(new Role()
             {
-                Name = "Admin"
+                Name = "Admin",
+                ConcurrencyStamp = ""
             });
             await _roleManager.CreateAsync(new Role()
             {
-                Name = "User"
+                Name = "User",
+                ConcurrencyStamp = ""
+
             });
         }
     }

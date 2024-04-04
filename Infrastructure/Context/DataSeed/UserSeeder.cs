@@ -21,7 +21,7 @@ public static class UserSeeder
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true
             };
-            await _userManager.CreateAsync(defaultuser, "123456");
+            await _userManager.CreateAsync(defaultuser, "Ah7_med_");
             await _userManager.AddToRoleAsync(defaultuser, "Admin");
         }
     }
