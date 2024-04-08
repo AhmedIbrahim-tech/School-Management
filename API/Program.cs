@@ -66,6 +66,18 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+#region Create Data Seed
+
+using (var Seed = app.Services.CreateScope())
+{
+    var userManager = Seed.ServiceProvider.GetRequiredService<UserManager<User>>();
+    var roleManager = Seed.ServiceProvider.GetRequiredService<RoleManager<Role>>();
+    await RoleSeeder.SeedAsync(roleManager);
+    await UserSeeder.SeedAsync(userManager);
+}
+
+#endregion
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

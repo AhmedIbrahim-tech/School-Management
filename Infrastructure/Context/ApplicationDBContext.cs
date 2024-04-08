@@ -21,6 +21,7 @@ namespace Infrastructure.Context
         {
         }
         public DbSet<User> User { get; set; }
+        public DbSet<Role> Role { get; set; }
         public DbSet<Department> departments { get; set; }
         public DbSet<Student> students { get; set; }
         public DbSet<DepartmetSubject> departmetSubjects { get; set; }
