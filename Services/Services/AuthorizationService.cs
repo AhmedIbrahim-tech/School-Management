@@ -1,4 +1,5 @@
-﻿using Infrastructure.Context;
+﻿using Data.Helpers;
+using Infrastructure.Context;
 using Microsoft.AspNetCore.Identity;
 using Services.Interface;
 using System.Security.Claims;
@@ -27,6 +28,22 @@ public class AuthorizationService : IAuthorizationService
     #endregion
 
     #region handle Functions
+
+    #region Get List of Roles
+    public async Task<List<Role>> GetRolesList()
+    {
+        return await _roleManager.Roles.ToListAsync();
+    }
+
+    #endregion
+
+    #region Get Role ById
+    public async Task<Role> GetRoleById(int id)
+    {
+        return await _roleManager.FindByIdAsync(id.ToString());
+    }
+
+    #endregion
 
     #region Create Role
     public async Task<string> AddRoleAsync(string roleName)
@@ -81,18 +98,7 @@ public class AuthorizationService : IAuthorizationService
 
     #endregion
 
-    #region MyRegion
-
-
-
-
-
-
-    public async Task<Role> GetRoleById(int id)
-    {
-        return await _roleManager.FindByIdAsync(id.ToString());
-    }
-
+    #region Manage User Roles
     public async Task<ManageUserRolesResult> ManageUserRolesData(User user)
     {
         var response = new ManageUserRolesResult();
@@ -118,7 +124,9 @@ public class AuthorizationService : IAuthorizationService
         response.userRoles = rolesList;
         return response;
     }
+    #endregion
 
+    #region Update User Roles
     public async Task<string> UpdateUserRoles(UpdateUserRolesRequest request)
     {
         var transact = await _dbContext.Database.BeginTransactionAsync();
@@ -152,33 +160,39 @@ public class AuthorizationService : IAuthorizationService
             return "FailedToUpdateUserRoles";
         }
     }
-    //public async Task<ManageUserClaimsResult> ManageUserClaimData(User user)
-    //{
-    //    var response = new ManageUserClaimsResult();
-    //    var usercliamsList = new List<UserClaims>();
-    //    response.UserId = user.Id;
-    //    //Get USer Claims
-    //    var userClaims = await _userManager.GetClaimsAsync(user); //edit
-    //                                                              //create edit get print
-    //    foreach (var claim in ClaimsStore.claims)
-    //    {
-    //        var userclaim = new UserClaims();
-    //        userclaim.Type = claim.Type;
-    //        if (userClaims.Any(x => x.Type == claim.Type))
-    //        {
-    //            userclaim.Value = true;
-    //        }
-    //        else
-    //        {
-    //            userclaim.Value = false;
-    //        }
-    //        usercliamsList.Add(userclaim);
-    //    }
-    //    response.userClaims = usercliamsList;
-    //    //return Result
-    //    return response;
-    //}
+    #endregion
 
+    #region Manage User Claim
+
+    public async Task<ManageUserClaimsResult> ManageUserClaimData(User user)
+    {
+        var response = new ManageUserClaimsResult();
+        var usercliamsList = new List<UserClaims>();
+        response.UserId = user.Id;
+        //Get USer Claims
+        var userClaims = await _userManager.GetClaimsAsync(user); //edit
+                                                                  //create edit get print
+        foreach (var claim in ClaimsStore.claims)
+        {
+            var userclaim = new UserClaims();
+            userclaim.Type = claim.Type;
+            if (userClaims.Any(x => x.Type == claim.Type))
+            {
+                userclaim.Value = true;
+            }
+            else
+            {
+                userclaim.Value = false;
+            }
+            usercliamsList.Add(userclaim);
+        }
+        response.userClaims = usercliamsList;
+        //return Result
+        return response;
+    }
+    #endregion
+
+    #region Update User Claims
     public async Task<string> UpdateUserClaims(UpdateUserClaimsRequest request)
     {
         var transact = await _dbContext.Database.BeginTransactionAsync();
@@ -212,14 +226,6 @@ public class AuthorizationService : IAuthorizationService
     #endregion
   
     #region Helper
-
-    #region Get List of Roles
-    public async Task<List<Role>> GetRolesList()
-    {
-        return await _roleManager.Roles.ToListAsync();
-    }
-
-    #endregion
 
     #region Check Role is Exists
     public async Task<bool> IsRoleExistByName(string roleName)

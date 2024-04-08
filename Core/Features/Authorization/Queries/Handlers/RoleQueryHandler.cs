@@ -14,6 +14,7 @@ public class RoleQueryHandler : GenericBaseResponseHandler,
     private readonly IStringLocalizer<SharedResources> _stringLocalizer;
     private readonly UserManager<User> _userManager;
     #endregion
+
     #region Constructors
     public RoleQueryHandler(IStringLocalizer<SharedResources> stringLocalizer,
                             IAuthorizationService authorizationService,
@@ -26,6 +27,7 @@ public class RoleQueryHandler : GenericBaseResponseHandler,
         _userManager = userManager;
     }
     #endregion
+    
     #region Handle Functions
     public async Task<GenericBaseResponse<List<GetRolesListResult>>> Handle(GetRolesListQuery request, CancellationToken cancellationToken)
     {
