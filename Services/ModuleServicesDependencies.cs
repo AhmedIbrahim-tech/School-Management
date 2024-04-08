@@ -15,8 +15,8 @@ public static class ModuleServicesDependencies
         services.AddTransient<IApplicationUserService, ApplicationUserService>();
         services.AddTransient<IAuthenticationService, AuthenticationService>();
         services.AddTransient<IAuthorizationService, AuthorizationService>();
-        
-        //services.AddTransient<IEmailsService, EmailsService>();
+        services.AddTransient<IEmailsService, EmailsService>();
+
         services.AddTransient<ICurrentUserService, CurrentUserService>();
         //services.AddTransient<IInstructorService, InstructorService>();
         services.AddTransient<IFileService, FileService>();

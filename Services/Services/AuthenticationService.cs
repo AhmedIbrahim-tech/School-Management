@@ -1,5 +1,6 @@
 ﻿using Data.Entities.Authentication;
 using Data.Entities.Identities;
+using Data.Entities.ThirdParty.MailService.Dtos;
 using Data.Helpers;
 using Infrastructure.Context;
 using Microsoft.AspNetCore.Identity;
@@ -295,7 +296,13 @@ public class AuthenticationService : IAuthenticationService
                 return "ErrorInUpdateUser";
             var message = "Code To Reset Passsword : " + user.Code;
             //Send Code To  Email 
-            await _emailsService.SendEmail(user.Email, message, "Reset Password");
+            var mail = new EmailDto()
+            {
+                MailTo = user.Email,
+                Subject = "Reset Password",
+                Body = message
+            };
+            await _emailsService.SendEmail(mail);
             await trans.CommitAsync();
             return "Success";
         }
