@@ -29,22 +29,6 @@ public class AuthorizationService : IAuthorizationService
 
     #region handle Functions
 
-    #region Get List of Roles
-    public async Task<List<Role>> GetRolesList()
-    {
-        return await _roleManager.Roles.ToListAsync();
-    }
-
-    #endregion
-
-    #region Get Role ById
-    public async Task<Role> GetRoleById(int id)
-    {
-        return await _roleManager.FindByIdAsync(id.ToString());
-    }
-
-    #endregion
-
     #region Create Role
     public async Task<string> AddRoleAsync(string roleName)
     {
@@ -58,6 +42,7 @@ public class AuthorizationService : IAuthorizationService
     #endregion
 
     #region Edit Role
+
     public async Task<string> EditRoleAsync(EditRoleRequest request)
     {
         //check role is exist or not
@@ -74,19 +59,19 @@ public class AuthorizationService : IAuthorizationService
         var errors = string.Join("-", result.Errors);
         return errors;
     }
-
     #endregion
-
-    #region Delete Role
 
     public async Task<string> DeleteRoleAsync(int roleId)
     {
         var role = await _roleManager.FindByIdAsync(roleId.ToString());
         if (role == null) return "NotFound";
+
         //Chech if user has this role or not
         var users = await _userManager.GetUsersInRoleAsync(role.Name);
+
         //return exception 
         if (users != null && users.Count() > 0) return "Used";
+
         //delete
         var result = await _roleManager.DeleteAsync(role);
         //success
@@ -96,9 +81,26 @@ public class AuthorizationService : IAuthorizationService
         return errors;
     }
 
-    #endregion
+    public async Task<bool> IsRoleExistById(int roleId)
+    {
+        var role = await _roleManager.FindByIdAsync(roleId.ToString());
+        if (role == null) return false;
+        else return true;
+    }
 
-    #region Manage User Roles
+
+    #region MyRegion
+
+
+
+
+
+
+    public async Task<Role> GetRoleById(int id)
+    {
+        return await _roleManager.FindByIdAsync(id.ToString());
+    }
+
     public async Task<ManageUserRolesResult> ManageUserRolesData(User user)
     {
         var response = new ManageUserRolesResult();
@@ -237,17 +239,6 @@ public class AuthorizationService : IAuthorizationService
     }
 
     #endregion
-
-    #region Check Role Is Exist By-Id
-    public async Task<bool> IsRoleExistById(int roleId)
-    {
-        var role = await _roleManager.FindByIdAsync(roleId.ToString());
-        if (role == null) return false;
-        else return true;
-    }
-
-    #endregion
-    
 
     #endregion
 
