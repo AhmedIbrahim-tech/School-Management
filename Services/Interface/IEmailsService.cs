@@ -1,6 +1,9 @@
-﻿namespace Services.Interface;
+﻿using Data.Entities.ThirdParty.MailService.Dtos;
+
+namespace Services.Interface;
 
 public interface IEmailsService
 {
-    public Task<string> SendEmail(string email, string Message, string? reason);
+    Task<string> SendEmail(EmailDto dto);//string email, string Message, string? reason);
+    Task<bool> SendEmailAsync(EmailDto emailDto);
 }

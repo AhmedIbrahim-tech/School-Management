@@ -6,3 +6,5 @@ global using Services.Interface.IServices;
 global using Data.Entities.DTOs;
 global using Data.Entities.Identities;
 global using Data.Entities.Results;
+global using Data.Helpers;
+global using Services.Interface;

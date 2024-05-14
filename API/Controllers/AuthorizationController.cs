@@ -9,21 +9,24 @@ namespace API.Controllers;
 public class AuthorizationController : GernericBaseController
 {
 
+    #region Role List
     [HttpGet(Router.Authorization.RoleList)]
     public async Task<IActionResult> GetRoleList()
     {
         var response = await _mediator.Send(new GetRolesListQuery());
         return ActionResult(response);
     }
-    [SwaggerOperation(Summary = "idالصلاحية عن طريق ال", OperationId = "RoleById")]
+
+    #endregion
+    
+    #region GET: RoleById
     [HttpGet(Router.Authorization.GetRoleById)]
     public async Task<IActionResult> GetRoleById([FromRoute] int id)
     {
         var response = await _mediator.Send(new GetRoleByIdQuery() { Id = id });
         return ActionResult(response);
-    }
-
-
+    } 
+    #endregion
 
     #region Create Role
 
@@ -49,7 +52,7 @@ public class AuthorizationController : GernericBaseController
 
     #endregion
 
-    #region Delete Role ByID
+    #region Delete Role
     [HttpDelete(Router.Authorization.Delete)]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
@@ -97,8 +100,6 @@ public class AuthorizationController : GernericBaseController
         return ActionResult(response);
     } 
     #endregion
-
-
 
 
 }
