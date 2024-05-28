@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core", "Core\Core.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{339EB95F-4500-4E3A-B39A-D08DAE67CBEF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitTest", "XUnitTest\XUnitTest.csproj", "{18AD6674-E39B-4BAA-BF25-70DF2DAD5E74}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{339EB95F-4500-4E3A-B39A-D08DAE67CBEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{339EB95F-4500-4E3A-B39A-D08DAE67CBEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{339EB95F-4500-4E3A-B39A-D08DAE67CBEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18AD6674-E39B-4BAA-BF25-70DF2DAD5E74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18AD6674-E39B-4BAA-BF25-70DF2DAD5E74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18AD6674-E39B-4BAA-BF25-70DF2DAD5E74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18AD6674-E39B-4BAA-BF25-70DF2DAD5E74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
