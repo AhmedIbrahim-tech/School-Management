@@ -295,7 +295,7 @@ public class AuthenticationService : IAuthenticationService
                 return "ErrorInUpdateUser";
             var message = "Code To Reset Passsword : " + user.Code;
             //Send Code To  Email 
-            await _emailsService.SendEmail(user.Email, message, "Reset Password");
+            //await _emailsService.SendEmail(user.Email, message, "Reset Password");
             await trans.CommitAsync();
             return "Success";
         }

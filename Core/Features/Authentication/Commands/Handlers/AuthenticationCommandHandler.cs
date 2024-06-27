@@ -92,7 +92,7 @@ namespace Core.Features.Authentication.Commands.Handlers
 
         #endregion
 
-
+        #region Reset Password
         public async Task<GenericBaseResponse<string>> Handle(SendResetPasswordCommand request, CancellationToken cancellationToken)
         {
             var result = await _authenticationService.SendResetPasswordCode(request.Email);
@@ -116,7 +116,8 @@ namespace Core.Features.Authentication.Commands.Handlers
                 case "Success": return Success<string>("");
                 default: return BadRequest<string>(_stringLocalizer[SharedResourcesKeys.InvaildCode]);
             }
-        }
+        } 
+        #endregion
 
         #endregion
     }

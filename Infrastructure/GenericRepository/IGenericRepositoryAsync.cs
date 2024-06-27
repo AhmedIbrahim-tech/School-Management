@@ -6,8 +6,8 @@ public interface IGenericRepositoryAsync<T> where T : class
     void Commit();
     void RollBack();
 
-    IQueryable<T> GetTableNoTracking();
-    IQueryable<T> GetTableAsTracking();
+    IQueryable<T> GetTableNoTracking();  // Used when only data needs to be read without having to track or modify that data, which improves performance.
+    IQueryable<T> GetTableAsTracking();  // sed when you need to track entities and update them later in the database.
 
     Task<T> GetByIdAsync(int id);
     
