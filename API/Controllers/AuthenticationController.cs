@@ -62,13 +62,16 @@ public class AuthenticationController : GernericBaseController
     {
         var response = await _mediator.Send(query);
         return ActionResult(response);
-    } 
+    }
     #endregion
+
+    #region Reset Password
     [HttpPost(Router.Authentication.ResetPassword)]
     public async Task<IActionResult> ResetPassword([FromForm] ResetPasswordCommand command)
     {
         var response = await _mediator.Send(command);
         return ActionResult(response);
-    }
+    } 
+    #endregion
 
 }

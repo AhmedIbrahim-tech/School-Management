@@ -1,4 +1,6 @@
 ﻿using Data.Entities.Identities;
+using Data.Entities.Models;
+using Data.Entities.ThirdParty.MailService.Dtos;
 using Infrastructure.Context;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -17,23 +19,23 @@ namespace Services.Services
         #region Fields
         private readonly UserManager<User> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        //private readonly IEmailsService _emailsService;
+        private readonly IEmailsService _emailsService;
         private readonly ApplicationDBContext _applicationDBContext;
-        //private readonly IUrlHelper _urlHelper;
+        private readonly IUrlHelper _urlHelper;
         #endregion
 
         #region Constructors
         public ApplicationUserService(UserManager<User> userManager,
                                       IHttpContextAccessor httpContextAccessor,
-                                      //IEmailsService emailsService,
-                                      ApplicationDBContext applicationDBContext)
-        //IUrlHelper urlHelper)
+                                      IEmailsService emailsService,
+                                      ApplicationDBContext applicationDBContext,
+                                      IUrlHelper urlHelper)
         {
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
-            //_emailsService = emailsService;
+            _emailsService = emailsService;
             _applicationDBContext = applicationDBContext;
-            //_urlHelper = urlHelper;
+            _urlHelper = urlHelper;
         }
         #endregion
 
@@ -42,11 +44,12 @@ namespace Services.Services
         #region Create User
         public async Task<string> AddUserAsync(User user, string password)
         {
-            var trans = await _applicationDBContext.Database.BeginTransactionAsync();
+            var Transaction = await _applicationDBContext.Database.BeginTransactionAsync();
             try
             {
                 //if Email is Exist
                 var existUser = await _userManager.FindByEmailAsync(user.Email);
+
                 //email is Exist
                 if (existUser != null) return "EmailIsExist";
 
@@ -63,25 +66,33 @@ namespace Services.Services
                     return string.Join(",", createResult.Errors.Select(x => x.Description).ToList());
 
                 var ListofUsers = await _userManager.Users.ToListAsync();
-                
+
                 await _userManager.AddToRoleAsync(user, "User");
 
 
                 //Send Confirm Email
-                //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                //var resquestAccessor = _httpContextAccessor.HttpContext.Request;
-                //var returnUrl = resquestAccessor.Scheme + "://" + resquestAccessor.Host + _urlHelper.Action("ConfirmEmail", "Authentication", new { userId = user.Id, code = code });
-                //var message = $"To Confirm Email Click Link: <a href='{returnUrl}'></a>";
+                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var resquestAccessor = _httpContextAccessor.HttpContext.Request;
+                var returnUrl = resquestAccessor.Scheme + "://" + resquestAccessor.Host + _urlHelper.Action("ConfirmEmail", "Authentication",
+                                      new { userId = user.Id, code = code });
+                var message = $"To Confirm Email Click Link: <a href='{returnUrl}'></a>";
                 //$"/Api/V1/Authentication/ConfirmEmail?userId={user.Id}&code={code}";
                 //message or body
-                //await _emailsService.SendEmail(user.Email, message, "ConFirm Email");
+                var email = new EmailDto()
+                {
+                    MailTo = user.Email,
+                    Body = message,
+                    Subject = "ConFirm Email"
+                };
+                var sendemail = await _emailsService.SendEmailAsync(email);
+                if (!sendemail) return "Failed";
 
-                await trans.CommitAsync();
+                await Transaction.CommitAsync();
                 return "Success";
             }
             catch (Exception ex)
             {
-                await trans.RollbackAsync();
+                await Transaction.RollbackAsync();
                 return "Failed";
             }
 

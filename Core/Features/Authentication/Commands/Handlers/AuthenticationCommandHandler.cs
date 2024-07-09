@@ -49,7 +49,7 @@ namespace Core.Features.Authentication.Commands.Handlers
             var user = await _userManager.FindByNameAsync(request.UserName);
 
             //Return The UserName Not Found
-            if (user == null) return BadRequest<JwtAuthResult>(_stringLocalizer[SharedResourcesKeys.UserNameIsNotExist]);
+            if (user is null) return BadRequest<JwtAuthResult>(_stringLocalizer[SharedResourcesKeys.UserNameIsNotExist]);
 
             //try To Sign in 
             var signInResult = _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
@@ -58,7 +58,7 @@ namespace Core.Features.Authentication.Commands.Handlers
             if (!signInResult.IsCompletedSuccessfully) return BadRequest<JwtAuthResult>(_stringLocalizer[SharedResourcesKeys.PasswordNotCorrect]);
 
             //confirm email
-            //if (!user.EmailConfirmed) return BadRequest<JwtAuthResult>(_stringLocalizer[SharedResourcesKeys.EmailNotConfirmed]);
+            if (!user.EmailConfirmed) return BadRequest<JwtAuthResult>(_stringLocalizer[SharedResourcesKeys.EmailNotConfirmed]);
 
             //Generate Token
             var result = await _authenticationService.GetJWTToken(user);

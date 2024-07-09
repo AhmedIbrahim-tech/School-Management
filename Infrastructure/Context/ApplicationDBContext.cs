@@ -1,6 +1,9 @@
 ﻿
 using Data.Entities.Identities;
 using Data.Entities.Models;
+using EntityFrameworkCore.EncryptColumn.Extension;
+using EntityFrameworkCore.EncryptColumn.Interfaces;
+using EntityFrameworkCore.EncryptColumn.Util;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
@@ -17,8 +20,14 @@ namespace Infrastructure.Context
         IdentityUserToken<int>
         >
     {
+        private readonly IEncryptionProvider _encryptionProvider;
+        public ApplicationDBContext()
+        {
+            
+        }
         public ApplicationDBContext(DbContextOptions<ApplicationDBContext> options) : base(options)
         {
+            _encryptionProvider = new GenerateEncryptionProvider("8a4dcaaec64d412380fe4b02193cd26f");
         }
         public DbSet<User> User { get; set; }
         public DbSet<Role> Role { get; set; }
@@ -33,6 +42,7 @@ namespace Infrastructure.Context
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            modelBuilder.UseEncryption(_encryptionProvider);
         }
     }
 

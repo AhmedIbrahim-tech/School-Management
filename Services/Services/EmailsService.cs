@@ -20,7 +20,7 @@ public class EmailsService : IEmailsService
     #endregion
 
     #region Handle Functions
-    public async Task<string> SendEmail(EmailDto dto)//string email, string Message, string? reason)
+    public async Task<string> SendEmail(EmailDto dto)
     {
         try
         {

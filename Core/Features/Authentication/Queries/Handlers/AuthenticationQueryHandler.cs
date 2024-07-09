@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 namespace Core.Features.Authentication.Queries.Handlers
 {
     public class AuthenticationQueryHandler : GenericBaseResponseHandler,
-        IRequestHandler<AuthorizeUserQuery, GenericBaseResponse<string>>
-        //IRequestHandler<ConfirmEmailQuery, GenericBaseResponse<string>>,
+        IRequestHandler<AuthorizeUserQuery, GenericBaseResponse<string>> ,
+        IRequestHandler<ConfirmEmailQuery, GenericBaseResponse<string>>
         //IRequestHandler<ConfirmResetPasswordQuery, GenericBaseResponse<string>>
     {
 
@@ -42,6 +42,7 @@ namespace Core.Features.Authentication.Queries.Handlers
             return Unauthorized<string>(_stringLocalizer[SharedResourcesKeys.TokenIsExpired]);
         }
 
+        #region Confirm Email
         public async Task<GenericBaseResponse<string>> Handle(ConfirmEmailQuery request, CancellationToken cancellationToken)
         {
             var confirmEmail = await _authenticationService.ConfirmEmail(request.UserId, request.Code);
@@ -49,7 +50,9 @@ namespace Core.Features.Authentication.Queries.Handlers
                 return BadRequest<string>(_stringLocalizer[SharedResourcesKeys.ErrorWhenConfirmEmail]);
             return Success<string>(_stringLocalizer[SharedResourcesKeys.ConfirmEmailDone]);
         }
+        #endregion
 
+        #region Confirm Reset Password
         //public async Task<GenericBaseResponse<string>> Handle(ConfirmResetPasswordQuery request, CancellationToken cancellationToken)
         //{
         //    var result = await _authenticationService.ConfirmResetPassword(request.Code, request.Email);
@@ -60,7 +63,9 @@ namespace Core.Features.Authentication.Queries.Handlers
         //        case "Success": return Success<string>("");
         //        default: return BadRequest<string>(_stringLocalizer[SharedResourcesKeys.InvaildCode]);
         //    }
-        //}
+        //} 
+        #endregion
+
         #endregion
     }
 }
