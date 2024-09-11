@@ -1,7 +1,7 @@
 ﻿namespace API.Controllers;
 
 [ApiController]
-public class AuthenticationController : GernericBaseController
+public class AuthenticationController : GenericBaseController
 {
     #region POST: Sign In
 

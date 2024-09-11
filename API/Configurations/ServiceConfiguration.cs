@@ -12,7 +12,7 @@ public static class ServiceConfiguration
         {
             var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;
             var factory = x.GetRequiredService<IUrlHelperFactory>();
-            return factory.GetUrlHelper(actionContext);
+            return factory.GetUrlHelper(actionContext ?? throw new InvalidOperationException());
         });
     }
 }

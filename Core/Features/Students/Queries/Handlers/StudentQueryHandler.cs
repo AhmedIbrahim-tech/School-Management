@@ -1,4 +1,5 @@
-﻿using Data.Entities.Models;
+﻿using Data.Command;
+using Data.Entities.Models;
 
 namespace Core.Features.Students.Queries.Handlers;
 
@@ -26,8 +27,8 @@ public class StudentQueryHandler : GenericBaseResponseHandler,
     public async Task<GenericBaseResponse<List<GetStudentListResponse>>> Handle(GetStudentListQuery request, CancellationToken cancellationToken)
     {
         var response = await _studentServices.GetStudentsListAsync();
-        var MapperObj = _mapper.Map<List<GetStudentListResponse>>(response);
-        var result = Success(MapperObj);
+        var mapperObj = _mapper.Map<List<GetStudentListResponse>>(response);
+        var result = Success(mapperObj);
         result.Meta = new { Count = result.Data.Count() };
         return result;
     }
@@ -35,21 +36,25 @@ public class StudentQueryHandler : GenericBaseResponseHandler,
     public async Task<GenericBaseResponse<GetSingleStudentResponse>> Handle(GetSingleStudentQuery request, CancellationToken cancellationToken)
     {
         var response = await _studentServices.GetStudentsByIdAsync(request.Id);
-        if (response == null) return NotFound<GetSingleStudentResponse>(_stringLocalizer[SharedResourcesKeys.NotFound]);
-        var MapperObj = _mapper.Map<GetSingleStudentResponse>(response);
-        return Success(MapperObj);
+        var mapperObj = _mapper.Map<GetSingleStudentResponse>(response);
+        return Success(mapperObj);
 
     }
 
     public async Task<PaginationResult<GetStudentPaginationListResponse>> Handle(GetStudentPaginationListQuery request, CancellationToken cancellationToken)
     {
-        Expression<Func<Student, GetStudentPaginationListResponse>> expression = e => new GetStudentPaginationListResponse
-                    (e.StudID, e.GeneralLocalize(e.NameAr, e.NameEn), e.Address, e.Phone, e.GeneralLocalize(e.Department.DNameAr, e.Department.DNameEn));
+        //Expression<Func<Student, GetStudentPaginationListResponse>> expression = e => new GetStudentPaginationListResponse(e.StudID, GeneralLocalizeEntity.GeneralLocalize(e.NameAr, e.NameEn), e.Address, e.Phone, GeneralLocalizeEntity.GeneralLocalize(e.Department.DNameAr, e.Department.DNameEn));
+        // var FilterQuery = _studentServices.FilterStudentsPaginationQueryAbleAsync(request.Orderby, request.Search);
+        // var PaginationList = await FilterQuery.Select(expression).ToPaginationListAsync(request.PageNumber, request.PageSize);
+        // PaginationList.Meta = new { Count = PaginationList.Data.Count() };
+        // return PaginationList;
+        
+        
+        var filterQuery = _studentServices.FilterStudentsPaginationQueryAbleAsync(request.Orderby, request.Search);
+        var paginatedList = await _mapper.ProjectTo<GetStudentPaginationListResponse>(filterQuery).ToPaginationListAsync(request.PageNumber, request.PageSize);
+        paginatedList.Meta=new { Count = paginatedList.Data.Count() };
+        return paginatedList;
 
-        var FilterQuery = _studentServices.FilterStudentsPaginationQueryAbleAsync(request.Orderby, request.Search);
-        var PaginationList = await FilterQuery.Select(expression).ToPaginationListAsync(request.PageNumber, request.PageSize);
-        PaginationList.Meta = new { Count = PaginationList.Data.Count() };
-        return PaginationList;
     }
     #endregion
 }

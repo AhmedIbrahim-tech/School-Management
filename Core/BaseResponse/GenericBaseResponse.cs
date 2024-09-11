@@ -2,6 +2,8 @@
 
 public class GenericBaseResponse<T>
 {
+
+
     public GenericBaseResponse()
     {
 
@@ -20,10 +22,20 @@ public class GenericBaseResponse<T>
         Message = message;
     }
 
-    public GenericBaseResponse(string message, bool succeeded)
+    public GenericBaseResponse(bool succeeded, string message)
     {
         Succeeded = succeeded;
         Message = message;
+    }
+    
+    public GenericBaseResponse(bool succeeded, HttpStatusCode statusCode, string message, T data, List<string> errors, object meta)
+    {
+        StatusCode = statusCode;
+        Meta = meta;
+        Message = message;
+        Succeeded = succeeded;
+        Errors = errors;
+        Data = data;
     }
 
     public HttpStatusCode StatusCode { get; set; }

@@ -1,21 +1,11 @@
 ﻿using System.Globalization;
 
-namespace Data.Command
+namespace Data.Command;
+public class GeneralLocalizeEntity
 {
-    public class GeneralLocalizeEntity
+    public static string GeneralLocalize(string textAr, string textEn)
     {
-
-        public string GeneralLocalize(string textAr, string textEn)
-        {
-            CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
-            if (cultureInfo.TwoLetterISOLanguageName.ToLower().Equals("ar"))
-            {
-                return textAr;
-            }
-            else
-            {
-                return textEn;
-            }
-        }
+        var cultureInfo = Thread.CurrentThread.CurrentCulture;
+        return cultureInfo.TwoLetterISOLanguageName.ToLower().Equals("ar") ? textAr : textEn;
     }
 }

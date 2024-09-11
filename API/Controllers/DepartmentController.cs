@@ -1,7 +1,7 @@
 ﻿namespace API.Controllers
 {
     [ApiController]
-    public class DepartmentController : GernericBaseController
+    public class DepartmentController : GenericBaseController
     {
         #region Get Single Department by ID
         [HttpGet(Router.Department.GetById)]

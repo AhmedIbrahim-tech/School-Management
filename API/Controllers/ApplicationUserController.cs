@@ -1,7 +1,7 @@
 ﻿namespace API.Controllers;
 
 [ApiController]
-public class ApplicationUserController : GernericBaseController
+public class ApplicationUserController : GenericBaseController
 {
 
     #region Paginated User
@@ -15,7 +15,7 @@ public class ApplicationUserController : GernericBaseController
     #endregion
 
     #region Get User By ID
-    [HttpGet(Router.User.GetByID)]
+    [HttpGet(Router.User.GetById)]
     public async Task<IActionResult> GetStudentByID([FromRoute] int id)
     {
         var result = await _mediator.Send(new GetUserByIdQuery(id));

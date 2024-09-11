@@ -27,7 +27,7 @@ public static class LocalizationConfiguration
     public static void UseLocalization(this WebApplication app)
     {
         var options = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
-        app.UseRequestLocalization(options.Value);
+        app.UseRequestLocalization(options!.Value);
     }
 
 }

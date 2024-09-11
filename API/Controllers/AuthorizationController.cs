@@ -6,7 +6,7 @@ namespace API.Controllers;
 
 [ApiController]
 [Authorize(Roles = "Admin")]
-public class AuthorizationController : GernericBaseController
+public class AuthorizationController : GenericBaseController
 {
 
     #region Role List

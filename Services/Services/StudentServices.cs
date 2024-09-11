@@ -39,7 +39,7 @@ public class StudentServices : IStudentServices
         return _studentRepository.GetTableNoTracking().Include(x => x.Department).AsQueryable();
     }
 
-    public IQueryable<Student> FilterStudentsPaginationQueryAbleAsync(StudentOrderEnum orderEnum, string search)
+    public IQueryable<Student> FilterStudentsPaginationQueryAbleAsync(StudentOrderEnum orderEnum, string? search)
     {
         var Queryable = _studentRepository.GetTableNoTracking().Include(x => x.Department).AsQueryable();
         if (Queryable != null)

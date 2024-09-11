@@ -1,7 +1,7 @@
 ﻿namespace API.Controllers
 {
     [ApiController]
-    public class GernericBaseController : ControllerBase
+    public class GenericBaseController : ControllerBase
     {
         private IMediator _mediatorInstance;
         protected IMediator _mediator => _mediatorInstance ?? HttpContext.RequestServices.GetService<IMediator>();

@@ -1,4 +1,6 @@
-﻿namespace Core.Features.Department.Queries.Handlers;
+﻿using Data.Command;
+
+namespace Core.Features.Department.Queries.Handlers;
 
 public class DepartmentQueryHandler : GenericBaseResponseHandler, IRequestHandler<GetSingleDepartmentQuery, GenericBaseResponse<GetSingleDepartmentResponse>>
 {
@@ -35,7 +37,7 @@ public class DepartmentQueryHandler : GenericBaseResponseHandler, IRequestHandle
         var Mapping = _mapper.Map<GetSingleDepartmentResponse>(result);
 
         // Pagination
-        Expression<Func<Student, StudentResponse>> expression = e => new StudentResponse(e.StudID, e.GeneralLocalize(e.NameAr, e.NameEn));
+        Expression<Func<Student, StudentResponse>> expression = e => new StudentResponse(e.StudID, GeneralLocalizeEntity.GeneralLocalize(e.NameAr, e.NameEn));
         var studentQuerable = _studentService.GetStudentsByDepartmentIDQuerable(request.Id);
         var PaginatedList = await studentQuerable.Select(expression).ToPaginationListAsync(request.StudentPageNumber, request.StudentPageSize);
         Mapping.StudentsList = PaginatedList;

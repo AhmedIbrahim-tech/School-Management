@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
     [ApiController]
-    public class EmailsController : GernericBaseController
+    public class EmailsController : GenericBaseController
     {
         [HttpPost(Router.Emails.SendEmail)]
         public async Task<IActionResult> SendEmail([FromForm] SendEmailCommand command)

@@ -4,7 +4,7 @@ global using Core.Features.Department.Queries.Models;
 global using Core.Features.Students.Commands.Requests;
 global using Core.Features.Students.Queries.Requests;
 global using Core.Middleware;
-global using Data.AppMetaData;
+global using Data.Contract;
 global using Infrastructure;
 global using Infrastructure.Context;
 global using MediatR;

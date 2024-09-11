@@ -1,35 +1,78 @@
-﻿namespace Core.Mapping.Student;
+﻿using AutoMapper;
+using Data.Command;
+
+namespace Core.Mapping.Student;
 
 public class StudentProfile : Profile
 {
     public StudentProfile()
     {
         // Get Student List 
+        MapStudentList();
+        
+        // Get Single Student 
+        MapSingleStudent();
+        
+        // Add Student 
+        MapAddStudent();
+        
+        // Edit Student 
+        MapEditStudent();
+        
+        // Delete Student 
+        MapDeleteStudent();
+    }
+
+    private void MapStudentList()
+    {
+        // Get Student List 
         CreateMap<Data.Entities.Models.Student, GetStudentListResponse>()
-            .ForMember(response => response.DepartmentName, options => options.MapFrom(Sour => Sour.Department.DNameEn))
-            .ForMember(response => response.Name, options => options.MapFrom(Sour => Sour.GeneralLocalize(Sour.NameAr, Sour.NameEn)));
-
-        //Get Single Student 
+            .ForMember(destination => destination.DepartmentName, options => 
+                options.MapFrom(sour => sour.Department != null ? sour.Department.DNameEn : string.Empty)) // Handle null Department
+            .ForMember(destination => destination.Name, options => 
+                options.MapFrom(sour => GeneralLocalizeEntity.GeneralLocalize(sour.NameAr, sour.NameEn)))
+            .ReverseMap();
+    }
+    
+    private void MapSingleStudent()
+    {
+        // Get Single Student 
         CreateMap<Data.Entities.Models.Student, GetSingleStudentResponse>()
-            .ForMember(response => response.DepartmentName, options => options.MapFrom(Sour => Sour.Department.DNameEn))
-            .ForMember(response => response.Name, options => options.MapFrom(Sour => Sour.GeneralLocalize(Sour.NameAr, Sour.NameEn)));
-
-
-        //Add Student 
+            .ForMember(destination => destination.DepartmentName, options => 
+                options.MapFrom(sour => sour.Department != null ? sour.Department.DNameEn : string.Empty)) // Handle null Department
+            .ForMember(destination => destination.Name, options => 
+                options.MapFrom(sour => GeneralLocalizeEntity.GeneralLocalize(sour.NameAr, sour.NameEn)))
+            .ReverseMap();
+    }
+    
+    private void MapAddStudent()
+    {
+        // Add Student 
         CreateMap<AddStudentCommand, Data.Entities.Models.Student>()
-            .ForMember(response => response.DID, options => options.MapFrom(Sour => Sour.DepartmentId))
-            .ForMember(response => response.NameAr, options => options.MapFrom(Sour => Sour.NameAr))
-            .ForMember(response => response.NameEn, options => options.MapFrom(Sour => Sour.NameEn));
-
-
-        //Edit Student 
+            .ForMember(destination => destination.DID, options => 
+                options.MapFrom(sour => sour.DepartmentId))
+            .ForMember(destination => destination.NameAr, options => 
+                options.MapFrom(sour => sour.NameAr))
+            .ForMember(destination => destination.NameEn, options => 
+                options.MapFrom(sour => sour.NameEn))
+            .ReverseMap();
+    }
+    
+    
+    private void MapEditStudent()
+    {
+        // Edit Student 
         CreateMap<EditStudentCommand, Data.Entities.Models.Student>()
-            .ForMember(response => response.DID, options => options.MapFrom(Sour => Sour.DepartmentId))
-            .ForMember(response => response.StudID, option => option.MapFrom(sour => sour.Id));
+            .ForMember(destination => destination.DID, options => 
+                options.MapFrom(sour => sour.DepartmentId))
+            .ForMember(destination => destination.StudID, options => 
+                options.MapFrom(sour => sour.Id));
+    }
 
-        //Delete Student 
+    
+    private void MapDeleteStudent()
+    {
+        // Delete Student 
         CreateMap<DeleteStudentCommand, Data.Entities.Models.Student>();
-
     }
 }
-
