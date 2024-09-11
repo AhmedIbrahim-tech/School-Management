@@ -24,31 +24,27 @@ public class ErrorHandlerMiddleware
             var response = context.Response;
             response.ContentType = "application/json";
             var responseModel = new GenericBaseResponse<string>() { Succeeded = false, Message = error?.Message };
-            //TODO:: cover all validation errors
+
             switch (error)
             {
                 case UnauthorizedAccessException e:
-                    // custom application error
                     responseModel.Message = error.Message;
                     responseModel.StatusCode = HttpStatusCode.Unauthorized;
                     response.StatusCode = (int)HttpStatusCode.Unauthorized;
                     break;
 
                 case ValidationException e:
-                    // custom validation error
                     responseModel.Message = error.Message;
                     responseModel.StatusCode = HttpStatusCode.UnprocessableEntity;
                     response.StatusCode = (int)HttpStatusCode.UnprocessableEntity;
                     break;
                 case KeyNotFoundException e:
-                    // not found error
                     responseModel.Message = error.Message; ;
                     responseModel.StatusCode = HttpStatusCode.NotFound;
                     response.StatusCode = (int)HttpStatusCode.NotFound;
                     break;
 
                 case DbUpdateException e:
-                    // can't update error
                     responseModel.Message = e.Message;
                     responseModel.StatusCode = HttpStatusCode.BadRequest;
                     response.StatusCode = (int)HttpStatusCode.BadRequest;
@@ -69,7 +65,6 @@ public class ErrorHandlerMiddleware
                     break;
 
                 default:
-                    // unhandled error
                     responseModel.Message = error.Message;
                     responseModel.StatusCode = HttpStatusCode.InternalServerError;
                     response.StatusCode = (int)HttpStatusCode.InternalServerError;

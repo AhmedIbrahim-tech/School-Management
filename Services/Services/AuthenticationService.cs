@@ -1,11 +1,10 @@
 ﻿using Data.Entities.Authentication;
-using Data.Entities.Identities;
-using Data.Helpers;
+using Data.Entities.ThirdParty.MailService.Dtos;
+using EntityFrameworkCore.EncryptColumn.Interfaces;
+using EntityFrameworkCore.EncryptColumn.Util;
 using Infrastructure.Context;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using Services.Interface;
-using System.Collections.Concurrent;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
@@ -22,7 +21,7 @@ public class AuthenticationService : IAuthenticationService
     private readonly JwtSettings _jwtSettings;
     private readonly IRefreshTokenRepository _refreshTokenRepository;
     private readonly IEmailsService _emailsService;
-    //private readonly IEncryptionProvider _encryptionProvider;
+    private readonly IEncryptionProvider _encryptionProvider;
     //private readonly ConcurrentDictionary<string, RefreshToken> _userRefreshToken;
     #endregion 
 
@@ -40,7 +39,7 @@ public class AuthenticationService : IAuthenticationService
         _jwtSettings = jwtSettings;
         _refreshTokenRepository = refreshTokenRepository;
         _emailsService = emailsService;
-        //_encryptionProvider = new GenerateEncryptionProvider("8a4dcaaec64d412380fe4b02193cd26f");
+        _encryptionProvider = new GenerateEncryptionProvider("11aae3c4845c4ae79b077aef0d6b8825");
         //_userRefreshToken = new ConcurrentDictionary<string, RefreshToken>();
     }
     #endregion
@@ -48,7 +47,7 @@ public class AuthenticationService : IAuthenticationService
     #region Handle Functions
 
     #region GET : JWT Token
-   
+
     #region JWT Token
     public async Task<JwtAuthResult> GetJWTToken(User user)
     {
@@ -277,27 +276,36 @@ public class AuthenticationService : IAuthenticationService
         var trans = await _applicationDBContext.Database.BeginTransactionAsync();
         try
         {
-            //user
-            var user = await _userManager.FindByEmailAsync(Email);
-            //user not Exist => not found
-            if (user == null)
-                return "UserNotFound";
-            //Generate Random Number
+            // Get Cruuent User
+            var cruuentuser = await _userManager.FindByEmailAsync(Email);
 
-            //Random generator = new Random();
-            //string randomNumber = generator.Next(0, 1000000).ToString("D6");
+            // User not Exist => not found
+            if (cruuentuser == null) return "UserNotFound";
+
+            //Generate Random Number
+                // Random generator = new Random();
+                // string randomNumber = generator.Next(0, 1000000).ToString("D6");
             var chars = "0123456789";
             var random = new Random();
-            var randomNumber = new string(Enumerable.Repeat(chars, 6).Select(s => s[random.Next(s.Length)]).ToArray());
+            var randomNumber = new string(Enumerable.Repeat(chars, 6)
+                                                                .Select(s => s[random.Next(s.Length)]).ToArray());
 
             //update User In Database Code
-            user.Code = randomNumber;
-            var updateResult = await _userManager.UpdateAsync(user);
-            if (!updateResult.Succeeded)
-                return "ErrorInUpdateUser";
-            var message = "Code To Reset Passsword : " + user.Code;
+            cruuentuser.Code = randomNumber;
+            var updateResult = await _userManager.UpdateAsync(cruuentuser);
+            
+            if (!updateResult.Succeeded) return "ErrorInUpdateUser";
+            var message = "Code To Reset Passsword : " + cruuentuser.Code;
+
+            var emailobj = new EmailDto()
+            {
+                Subject = "Reset Password",
+                Body = message,
+                MailTo = cruuentuser.Email ?? ""
+            };
             //Send Code To  Email 
-            //await _emailsService.SendEmail(user.Email, message, "Reset Password");
+            await _emailsService.SendEmail(emailobj);
+
             await trans.CommitAsync();
             return "Success";
         }
@@ -313,14 +321,15 @@ public class AuthenticationService : IAuthenticationService
     #region 2). Confirm Reset Password
     public async Task<string> ConfirmResetPassword(string Code, string Email)
     {
-        //Get User
-        //user
+        // Get Cruuent User
         var user = await _userManager.FindByEmailAsync(Email);
+
         //user not Exist => not found
-        if (user == null)
-            return "UserNotFound";
+        if (user == null) return "UserNotFound";
+
         //Decrept Code From Database User Code
         var userCode = user.Code;
+        
         //Equal With Code
         if (userCode == Code) return "Success";
         return "Failed";
@@ -334,15 +343,17 @@ public class AuthenticationService : IAuthenticationService
         var trans = await _applicationDBContext.Database.BeginTransactionAsync();
         try
         {
-            //Get User
-            var user = await _userManager.FindByEmailAsync(Email);
-            //user not Exist => not found
-            if (user == null)
-                return "UserNotFound";
-            await _userManager.RemovePasswordAsync(user);
-            if (!await _userManager.HasPasswordAsync(user))
+            // Get Cruuent User
+            var cruuentuser = await _userManager.FindByEmailAsync(Email);
+            
+            //cruuent user not Exist => not found
+            if (cruuentuser == null) return "UserNotFound";
+
+            await _userManager.RemovePasswordAsync(cruuentuser);
+            
+            if (!await _userManager.HasPasswordAsync(cruuentuser))
             {
-                await _userManager.AddPasswordAsync(user, Password);
+                await _userManager.AddPasswordAsync(cruuentuser, Password);
             }
             await trans.CommitAsync();
             return "Success";
