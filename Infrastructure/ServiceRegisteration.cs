@@ -79,7 +79,20 @@ public static class ServiceRegisteration
         //Swagger Gn
         services.AddSwaggerGen(c =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo { Title = "School Project", Version = "v1" });
+            // Basic Swagger configuration
+            c.SwaggerDoc("v1", new OpenApiInfo 
+            { 
+                Title = "School Management System API", 
+                Version = "v1",
+                Description = "API for managing school system. Connect with me on LinkedIn: https://www.linkedin.com/in/ahmedeprahim/ or GitHub: https://github.com/AhmedIbrahim-tech",
+                Contact = new OpenApiContact
+                {
+                    Name = "Ahmed Eprahim",
+                    Email = "ahmedeprahim.official@gmail.com",
+                    Url = new Uri("https://www.linkedin.com/in/ahmedeprahim/") // LinkedIn link
+
+                }
+            });
             c.EnableAnnotations();
 
             c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
