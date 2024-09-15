@@ -12,14 +12,14 @@ public class StudentController : GenericBaseController
     public async Task<IActionResult> GetStudentship()
     {
         var response = await _mediator.Send(new GetStudentListQuery());
-        return Ok(response);
+        return ActionResult(response);
     }
 
     [HttpPost(Router.StudentRoute.Pagination)]
     public async Task<IActionResult> Pagination([FromBody] GetStudentPaginationListQuery dot)
     {
         var response = await _mediator.Send(dot);
-        return Ok(response);
+        return ActionResult(response);
     }
     #endregion
 

@@ -1,4 +1,6 @@
-﻿using Data.Command;
+﻿using Core.BaseResponse;
+using Core.Pagination;
+using Data.Command;
 using Data.Entities.Models;
 
 namespace Core.Features.Students.Queries.Handlers;
@@ -6,7 +8,7 @@ namespace Core.Features.Students.Queries.Handlers;
 public class StudentQueryHandler : GenericBaseResponseHandler,
                                    IRequestHandler<GetStudentListQuery, GenericBaseResponse<List<GetStudentListResponse>>>,
                                    IRequestHandler<GetSingleStudentQuery, GenericBaseResponse<GetSingleStudentResponse>>,
-                                   IRequestHandler<GetStudentPaginationListQuery, PaginationResult<GetStudentPaginationListResponse>>
+                                   IRequestHandler<GetStudentPaginationListQuery, GenericBaseResponse<PaginationResult<GetStudentPaginationListResponse>>>
 {
     #region Fields
     private readonly IStudentServices _studentServices;
@@ -41,19 +43,27 @@ public class StudentQueryHandler : GenericBaseResponseHandler,
 
     }
 
-    public async Task<PaginationResult<GetStudentPaginationListResponse>> Handle(GetStudentPaginationListQuery request, CancellationToken cancellationToken)
+    public async Task<GenericBaseResponse<PaginationResult<GetStudentPaginationListResponse>>> Handle(GetStudentPaginationListQuery request, CancellationToken cancellationToken)
     {
-        //Expression<Func<Student, GetStudentPaginationListResponse>> expression = e => new GetStudentPaginationListResponse(e.StudID, GeneralLocalizeEntity.GeneralLocalize(e.NameAr, e.NameEn), e.Address, e.Phone, GeneralLocalizeEntity.GeneralLocalize(e.Department.DNameAr, e.Department.DNameEn));
-        // var FilterQuery = _studentServices.FilterStudentsPaginationQueryAbleAsync(request.Orderby, request.Search);
-        // var PaginationList = await FilterQuery.Select(expression).ToPaginationListAsync(request.PageNumber, request.PageSize);
-        // PaginationList.Meta = new { Count = PaginationList.Data.Count() };
-        // return PaginationList;
-        
-        
-        var filterQuery = _studentServices.FilterStudentsPaginationQueryAbleAsync(request.Orderby, request.Search);
-        var paginatedList = await _mapper.ProjectTo<GetStudentPaginationListResponse>(filterQuery).ToPaginationListAsync(request.PageNumber, request.PageSize);
-        paginatedList.Meta=new { Count = paginatedList.Data.Count() };
-        return paginatedList;
+        try
+        {
+
+            //Expression<Func<Student, GetStudentPaginationListResponse>> expression = e => new GetStudentPaginationListResponse(e.StudID, GeneralLocalizeEntity.GeneralLocalize(e.NameAr, e.NameEn), e.Address, e.Phone, GeneralLocalizeEntity.GeneralLocalize(e.Department.DNameAr, e.Department.DNameEn));
+            // var FilterQuery = _studentServices.FilterStudentsPaginationQueryAbleAsync(request.Orderby, request.Search);
+            // var PaginationList = await FilterQuery.Select(expression).ToPaginationListAsync(request.PageNumber, request.PageSize);
+            // PaginationList.Meta = new { Count = PaginationList.Data.Count() };
+            // return PaginationList;
+
+
+            var filterQuery = _studentServices.FilterStudentsPaginationQueryAbleAsync(request.Orderby, request.Search);
+            var paginatedList = await _mapper.ProjectTo<GetStudentPaginationListResponse>(filterQuery).ToPaginationListAsync(request.PageNumber, request.PageSize);
+            paginatedList.Meta = new { Count = paginatedList.Data.Count() };
+            return Success(paginatedList);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest<PaginationResult<GetStudentPaginationListResponse>>();
+        }
 
     }
     #endregion

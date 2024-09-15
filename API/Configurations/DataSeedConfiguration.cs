@@ -1,6 +1,4 @@
-﻿using Data.Entities.Identities;
-using Infrastructure.Context.DataSeed;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace API.Configurations;
 

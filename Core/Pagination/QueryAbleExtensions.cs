@@ -2,19 +2,25 @@
 
 public static class QueryAbleExtensions
 {
-    public static async Task<PaginationResult<T>> ToPaginationListAsync<T>(this IQueryable<T> sourse, int pagenumber, int pagesize) where T : class
+    public static async Task<PaginationResult<T>> ToPaginationListAsync<T>(this IQueryable<T> source, int pageNumber, int pageSize) where T : class
     {
-        if (sourse == null)
+        if (source == null)
         {
-            throw new Exception("");
+            throw new ArgumentNullException(nameof(source), "Source query cannot be null.");
         }
-        pagenumber = pagenumber == 0 ? 1 : pagenumber;
-        pagesize = pagesize == 0 ? 10 : pagesize;
-        int count = await sourse.AsNoTracking().CountAsync();
-        if (count == 0) { return PaginationResult<T>.Success(new List<T>(), count, pagesize, pagenumber); }
-        pagenumber = pagenumber <= 0 ? 1 : pagenumber;
-        var items = await sourse.Skip((pagenumber - 1) * pagesize).Take(pagesize).ToListAsync();
-        return PaginationResult<T>.Success(items, count, pagesize, pagenumber);
+
+        pageNumber = pageNumber <= 0 ? 1 : pageNumber;
+        pageSize = pageSize <= 0 ? 10 : pageSize;
+
+        int totalCount = await source.AsNoTracking().CountAsync();
+
+        if (totalCount == 0)
+        {
+            return PaginationResult<T>.Success(new List<T>(), totalCount, pageNumber, pageSize);
+        }
+
+        var items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+        return PaginationResult<T>.Success(items, totalCount, pageNumber, pageSize);
     }
 }
 

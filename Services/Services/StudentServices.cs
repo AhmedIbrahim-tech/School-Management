@@ -77,13 +77,11 @@ public class StudentServices : IStudentServices
     #region Get Student By Id
     public async Task<Student> GetStudentsByIdAsync(int id)
     {
-        //var result = await _studentRepository.GetTableNoTracking()
-        //                               .Include(x => x.Department)
-        //                               .Where(x => x.StudID.Equals(id))
-        //                               .FirstOrDefaultAsync();
         var result = await _unitOfWork.StudentRepository
-            .GetTableNoTracking().Include(x => x.Department).Where(x => x.StudID.Equals(id)).FirstOrDefaultAsync();
-        return result;
+            .GetTableNoTracking().Include(x => x.Department)
+            .Where(x => x.StudID.Equals(id))
+            .FirstOrDefaultAsync();
+        return result ?? new Student();
     }
     #endregion
 

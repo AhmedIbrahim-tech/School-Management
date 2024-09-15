@@ -20,4 +20,7 @@ global using Core.Features.ApplicationUser.Commands.Requests;
 global using Core.Features.ApplicationUser.Queries.Requests;
 global using Core.Features.Authentication.Commands.Requests;
 global using Core.Features.Authentication.Queries.Requests;
+global using Data.Entities.Identities;
+global using Infrastructure.Context.DataSeed;
+
 

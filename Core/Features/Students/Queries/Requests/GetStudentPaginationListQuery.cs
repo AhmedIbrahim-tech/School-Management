@@ -1,7 +1,7 @@
 ﻿
 namespace Core.Features.Students.Queries.Requests;
 
-public class GetStudentPaginationListQuery : IRequest<PaginationResult<GetStudentPaginationListResponse>>
+public class GetStudentPaginationListQuery : IRequest<GenericBaseResponse<PaginationResult<GetStudentPaginationListResponse>>>
 {
     const int maxPageSize = 50000;
     public int PageNumber { get; set; } = 1;
