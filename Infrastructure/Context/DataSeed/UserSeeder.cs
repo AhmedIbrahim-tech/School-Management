@@ -19,7 +19,8 @@ public static class UserSeeder
                 PhoneNumber = "123456",
                 Address = "Egypt",
                 EmailConfirmed = true,
-                PhoneNumberConfirmed = true
+                PhoneNumberConfirmed = true,
+                Password = "Ah7_med_"
             };
             await _userManager.CreateAsync(defaultuser, "Ah7_med_");
             await _userManager.AddToRoleAsync(defaultuser, "Admin");

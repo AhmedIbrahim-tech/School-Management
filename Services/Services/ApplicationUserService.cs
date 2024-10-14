@@ -58,6 +58,8 @@ namespace Services.Services
                 //username is Exist
                 if (userByUserName != null) return "UserNameIsExist";
 
+                user.Password = password;
+
                 //Create
                 var createResult = await _userManager.CreateAsync(user, password);
 

@@ -5,10 +5,12 @@ using EntityFrameworkCore.EncryptColumn.Util;
 using Infrastructure.Context;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using System.Drawing;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 
 namespace Services.Services;
@@ -25,7 +27,7 @@ public class AuthenticationService : IAuthenticationService
     //private readonly ConcurrentDictionary<string, RefreshToken> _userRefreshToken;
     #endregion 
 
-    #region Constructor (s)
+    #region Constructors
     public AuthenticationService(
                                 ApplicationDBContext applicationDBContext,
                                 UserManager<User> userManager,
@@ -46,31 +48,16 @@ public class AuthenticationService : IAuthenticationService
 
     #region Handle Functions
 
-    #region GET : JWT Token
+    #region GET : JWT Token Management
 
-    #region JWT Token
+    #region 1). JWT Token Generation
     public async Task<JwtAuthResult> GetJWTToken(User user)
     {
         var (jwtToken, accessToken) = await GenerateJWTToken(user);
 
-        var refreshToken = GetRefreshToken(user.UserName);
+        var refreshToken = CreateRefreshToken(user.UserName);
 
-        #region Add Refresh Token to DB
-        var userRefreshToken = new UserRefreshToken
-        {
-            AddedTime = DateTime.Now,
-            ExpiryDate = DateTime.Now.AddDays(_jwtSettings.RefreshTokenExpireDate),
-            IsUsed = true,
-            IsRevoked = false,
-            JwtId = jwtToken.Id,
-            RefreshToken = refreshToken.TokenString,
-            Token = accessToken,
-            UserId = user.Id
-        };
-
-        await _refreshTokenRepository.AddAsync(userRefreshToken);
-
-        #endregion
+        await AddRefreshTokenToDB(user, jwtToken, refreshToken, accessToken);
 
         var response = new JwtAuthResult()
         {
@@ -78,10 +65,10 @@ public class AuthenticationService : IAuthenticationService
             refreshToken = refreshToken
         };
         return response;
-    } 
+    }
     #endregion
 
-    #region 1) List of Claims
+    #region 2). List of Claims
     public async Task<List<Claim>> GetClaims(User user)
     {
         var roles = await _userManager.GetRolesAsync(user);
@@ -103,27 +90,46 @@ public class AuthenticationService : IAuthenticationService
     }
     #endregion
 
-    #region 2). Generate JWT Token
+    #region 3). Generate JWT Token
 
     private async Task<(JwtSecurityToken, string)> GenerateJWTToken(User user)
     {
         var claims = await GetClaims(user);
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret));
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
+
         var jwtToken = new JwtSecurityToken(
-            _jwtSettings.Issuer,
-            _jwtSettings.Audience,
+            issuer: _jwtSettings.Issuer,
+            audience: _jwtSettings.Audience,
             claims,
             expires: DateTime.Now.AddDays(_jwtSettings.AccessTokenExpireDate),
-            signingCredentials: new SigningCredentials(
-                new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_jwtSettings.Secret)),
-                SecurityAlgorithms.HmacSha256Signature));
+            signingCredentials: creds);
+
         var accessToken = new JwtSecurityTokenHandler().WriteToken(jwtToken);
         return (jwtToken, accessToken);
     }
 
     #endregion
 
-    #region 3). Get Refresh Token
-    private RefreshToken GetRefreshToken(string username)
+    #region 4). Refresh Token Management
+
+    #region 1). Generate Random Number For Refresh Token 
+
+    private string GenerateRefreshToken()
+    {
+        //return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
+
+        var randomNumber = new byte[32];
+        var randomNumberGenerate = RandomNumberGenerator.Create();
+        randomNumberGenerate.GetBytes(randomNumber);
+        return Convert.ToBase64String(randomNumber);
+    }
+
+    #endregion
+
+    #region 2). Create Refresh Token
+
+    private RefreshToken CreateRefreshToken(string username)
     {
         var refreshToken = new RefreshToken
         {
@@ -131,19 +137,33 @@ public class AuthenticationService : IAuthenticationService
             UserName = username,
             TokenString = GenerateRefreshToken()
         };
-        //_userRefreshToken.AddOrUpdate(refreshToken.TokenString, refreshToken, (s, t) => refreshToken);
         return refreshToken;
     }
 
-    private string GenerateRefreshToken()
-    {
-        var randomNumber = new byte[32];
-        var randomNumberGenerate = RandomNumberGenerator.Create();
-        randomNumberGenerate.GetBytes(randomNumber);
-        return Convert.ToBase64String(randomNumber);
-    }
     #endregion
 
+    #region 3). Add Refresh Token to DB
+
+    private async Task AddRefreshTokenToDB(User user, JwtSecurityToken jwtToken, RefreshToken refreshToken, string accessToken)
+    {
+        var userRefreshToken = new UserRefreshToken
+        {
+            AddedTime = DateTime.Now,
+            ExpiryDate = DateTime.Now.AddDays(_jwtSettings.RefreshTokenExpireDate),
+            IsUsed = true,
+            IsRevoked = false,
+            JwtId = jwtToken.Id,
+            RefreshToken = refreshToken.TokenString,
+            Token = accessToken,
+            UserId = user.Id
+        };
+
+        await _refreshTokenRepository.AddAsync(userRefreshToken);
+    }
+
+    #endregion
+
+    #endregion
 
     #endregion
 
@@ -151,7 +171,7 @@ public class AuthenticationService : IAuthenticationService
     public async Task<JwtAuthResult> GetRefreshToken(User user, JwtSecurityToken jwtToken, DateTime? expiryDate, string refreshToken)
     {
         var (jwtSecurityToken, newToken) = await GenerateJWTToken(user);
-        
+
         var refreshTokenResult = new RefreshToken()
         {
             UserName = jwtToken.Claims.FirstOrDefault(x => x.Type == nameof(UserClaimModel.UserName)).Value,
@@ -168,7 +188,10 @@ public class AuthenticationService : IAuthenticationService
     }
     #endregion
 
-    #region Read JWT Token
+    #region JWT Token Validation
+
+    #region 1). Read JWT Token
+
     public JwtSecurityToken ReadJWTToken(string accessToken)
     {
         if (string.IsNullOrEmpty(accessToken))
@@ -179,11 +202,10 @@ public class AuthenticationService : IAuthenticationService
         var response = handler.ReadJwtToken(accessToken);
         return response;
     }
+
     #endregion
 
-    #region Check Validate Token
-
-    #region 1). Validate Token Parameters
+    #region 2). Validate Token Parameters
 
     public async Task<string> ValidateToken(string accessToken)
     {
@@ -216,7 +238,7 @@ public class AuthenticationService : IAuthenticationService
     }
     #endregion
 
-    #region 2). Validate Details
+    #region 3). Validate Details
     public async Task<(string, DateTime?)> ValidateDetails(JwtSecurityToken jwtToken, string accessToken, string refreshToken)
     {
         if (jwtToken == null || !jwtToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256Signature))
@@ -283,8 +305,8 @@ public class AuthenticationService : IAuthenticationService
             if (cruuentuser == null) return "UserNotFound";
 
             //Generate Random Number
-                // Random generator = new Random();
-                // string randomNumber = generator.Next(0, 1000000).ToString("D6");
+            // Random generator = new Random();
+            // string randomNumber = generator.Next(0, 1000000).ToString("D6");
             var chars = "0123456789";
             var random = new Random();
             var randomNumber = new string(Enumerable.Repeat(chars, 6)
@@ -293,7 +315,7 @@ public class AuthenticationService : IAuthenticationService
             //update User In Database Code
             cruuentuser.Code = randomNumber;
             var updateResult = await _userManager.UpdateAsync(cruuentuser);
-            
+
             if (!updateResult.Succeeded) return "ErrorInUpdateUser";
             var message = "Code To Reset Passsword : " + cruuentuser.Code;
 
@@ -319,7 +341,7 @@ public class AuthenticationService : IAuthenticationService
     #endregion
 
     #region 2). Confirm Reset Password
-    public async Task<string> ConfirmResetPassword(string Code, string Email)
+    public async Task<string> ConfirmResetPassword(string code, string Email)
     {
         // Get Cruuent User
         var user = await _userManager.FindByEmailAsync(Email);
@@ -328,11 +350,7 @@ public class AuthenticationService : IAuthenticationService
         if (user == null) return "UserNotFound";
 
         //Decrept Code From Database User Code
-        var userCode = user.Code;
-        
-        //Equal With Code
-        if (userCode == Code) return "Success";
-        return "Failed";
+        return user.Code == code ? "Success" : "Failed";
     }
 
     #endregion
@@ -345,12 +363,12 @@ public class AuthenticationService : IAuthenticationService
         {
             // Get Cruuent User
             var cruuentuser = await _userManager.FindByEmailAsync(Email);
-            
+
             //cruuent user not Exist => not found
             if (cruuentuser == null) return "UserNotFound";
 
             await _userManager.RemovePasswordAsync(cruuentuser);
-            
+
             if (!await _userManager.HasPasswordAsync(cruuentuser))
             {
                 await _userManager.AddPasswordAsync(cruuentuser, Password);
