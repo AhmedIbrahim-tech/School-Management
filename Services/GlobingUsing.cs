@@ -8,3 +8,7 @@ global using Data.Entities.Identities;
 global using Data.Entities.Results;
 global using Data.Helpers;
 global using Services.Interface;
+global using Data.Entities.Authentication;
+global using Data.Entities.ThirdParty.MailService.Dtos;
+global using Infrastructure.Context;
+global using Services.Services;

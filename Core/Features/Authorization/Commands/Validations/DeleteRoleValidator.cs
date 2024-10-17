@@ -4,11 +4,11 @@ public class DeleteRoleValidator : AbstractValidator<DeleteRoleCommand>
 {
     #region Fields
     private readonly IStringLocalizer<SharedResources> _stringLocalizer;
-    public readonly IAuthorizationService _authorizationService;
+    public readonly IAuthorizationServiceAsync _authorizationService;
 
     #endregion
     #region Constructors
-    public DeleteRoleValidator(IStringLocalizer<SharedResources> stringLocalizer, IAuthorizationService authorizationService)
+    public DeleteRoleValidator(IStringLocalizer<SharedResources> stringLocalizer, IAuthorizationServiceAsync authorizationService)
     {
         _stringLocalizer = stringLocalizer;
         _authorizationService = authorizationService;

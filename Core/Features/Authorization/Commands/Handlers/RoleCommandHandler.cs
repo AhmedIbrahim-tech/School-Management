@@ -8,13 +8,13 @@ public class RoleCommandHandler : GenericBaseResponseHandler,
 {
     #region Fields
     private readonly IStringLocalizer<SharedResources> _stringLocalizer;
-    private readonly IAuthorizationService _authorizationService;
+    private readonly IAuthorizationServiceAsync _authorizationService;
 
     #endregion
 
     #region Constructors
     public RoleCommandHandler(IStringLocalizer<SharedResources> stringLocalizer,
-                              IAuthorizationService authorizationService) : base(stringLocalizer)
+                              IAuthorizationServiceAsync authorizationService) : base(stringLocalizer)
     {
         _stringLocalizer = stringLocalizer;
         _authorizationService = authorizationService;

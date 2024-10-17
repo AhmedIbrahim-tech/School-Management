@@ -28,3 +28,6 @@ global using Core.Features.Department.Queries.Models;
 global using Data.Entities.Models;
 global using Core.Features.Authentication.Queries.Requests;
 global using Core.Features.ApplicationUser.Commands.Requests;
+global using Core.Features.Authentication.Commands.Requests;
+global using Data.Entities.Authentication;
+global using Services.Services;

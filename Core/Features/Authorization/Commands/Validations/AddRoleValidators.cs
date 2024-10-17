@@ -4,13 +4,13 @@ public class AddRoleValidators : AbstractValidator<AddRoleCommand>
 {
     #region Fields
     private readonly IStringLocalizer<SharedResources> _stringLocalizer;
-    private readonly IAuthorizationService _authorizationService;
+    private readonly IAuthorizationServiceAsync _authorizationService;
     #endregion
     #region Constructors
 
     #endregion
     public AddRoleValidators(IStringLocalizer<SharedResources> stringLocalizer,
-                             IAuthorizationService authorizationService)
+                             IAuthorizationServiceAsync authorizationService)
     {
         _stringLocalizer = stringLocalizer;
         _authorizationService = authorizationService;

@@ -9,7 +9,7 @@ public class RoleQueryHandler : GenericBaseResponseHandler,
    IRequestHandler<ManageUserRolesQuery, GenericBaseResponse<ManageUserRolesResult>>
 {
     #region Fields
-    private readonly IAuthorizationService _authorizationService;
+    private readonly IAuthorizationServiceAsync _authorizationService;
     private readonly IMapper _mapper;
     private readonly IStringLocalizer<SharedResources> _stringLocalizer;
     private readonly UserManager<User> _userManager;
@@ -17,7 +17,7 @@ public class RoleQueryHandler : GenericBaseResponseHandler,
 
     #region Constructors
     public RoleQueryHandler(IStringLocalizer<SharedResources> stringLocalizer,
-                            IAuthorizationService authorizationService,
+                            IAuthorizationServiceAsync authorizationService,
                             IMapper mapper,
                             UserManager<User> userManager) : base(stringLocalizer)
     {

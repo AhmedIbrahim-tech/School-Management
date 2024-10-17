@@ -1,21 +1,31 @@
-﻿using Data.Entities.Authentication;
-using Data.Entities.ThirdParty.MailService.Dtos;
-using EntityFrameworkCore.EncryptColumn.Interfaces;
+﻿using EntityFrameworkCore.EncryptColumn.Interfaces;
 using EntityFrameworkCore.EncryptColumn.Util;
-using Infrastructure.Context;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using System.Drawing;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 
 namespace Services.Services;
 
-public class AuthenticationService : IAuthenticationService
+#region Interface
+public interface IAuthenticationServiceAsync
+{
+    Task<JwtAuthResult> GetJWTToken(User user);
+    JwtSecurityToken ReadJWTToken(string accessToken);
+    Task<(string, DateTime?)> ValidateAndCheckJWTDetails(JwtSecurityToken jwtToken, string AccessToken, string RefreshToken);
+    Task<JwtAuthResult> GetRefreshToken(User user, JwtSecurityToken jwtToken, DateTime? expiryDate, string refreshToken);
+    Task<string> ValidateToken(string AccessToken);
+    Task<string> ConfirmEmail(int? userId, string? code);
+    public Task<string> SendResetPasswordCode(string Email);
+    public Task<string> ConfirmResetPassword(string code, string Email);
+    public Task<string> ResetPassword(string Email, string Password);
+} 
+#endregion
+
+public class AuthenticationServiceAsync : IAuthenticationServiceAsync
 {
     #region Fields
     private readonly ApplicationDBContext _applicationDBContext;
@@ -28,7 +38,7 @@ public class AuthenticationService : IAuthenticationService
     #endregion 
 
     #region Constructors
-    public AuthenticationService(
+    public AuthenticationServiceAsync(
                                 ApplicationDBContext applicationDBContext,
                                 UserManager<User> userManager,
                                 JwtSettings jwtSettings,
@@ -172,11 +182,16 @@ public class AuthenticationService : IAuthenticationService
     {
         var (jwtSecurityToken, newToken) = await GenerateJWTToken(user);
 
+        var UserNameClaim = jwtToken.Claims.FirstOrDefault(x => x.Type == nameof(UserClaimModel.UserName));
+
+        if (UserNameClaim == null)
+            throw new ArgumentNullException(nameof(UserNameClaim), "User not found.");
+
         var refreshTokenResult = new RefreshToken()
         {
-            UserName = jwtToken.Claims.FirstOrDefault(x => x.Type == nameof(UserClaimModel.UserName)).Value,
+            UserName = UserNameClaim.Value ?? "",
             TokenString = refreshToken,
-            ExpireAt = (DateTime)expiryDate
+            ExpireAt = Convert.ToDateTime(expiryDate), 
         };
         var response = new JwtAuthResult()
         {
@@ -186,9 +201,49 @@ public class AuthenticationService : IAuthenticationService
 
         return response;
     }
+
+    #region Old Way
+    public async Task<JwtAuthResult> RefreshToken(string accesstoken, string refreshToken)
+    {
+        var readJwtToken = ReadJWTToken(accesstoken);
+        var (result, expiryDateToken) = await ValidateAndCheckJWTDetails(readJwtToken, accesstoken, refreshToken);
+        var userIdClaim = readJwtToken.Claims.FirstOrDefault(x => x.Type == nameof(UserClaimModel.Id));
+
+        if (userIdClaim == null)
+            throw new ArgumentNullException(nameof(userIdClaim), "User not found.");
+
+        var userId = userIdClaim.Value ?? "";
+        var user = await _userManager.FindByIdAsync(userId);
+
+        if (user == null)
+            throw new ArgumentNullException(nameof(user), "User not active or not found.");
+        if (expiryDateToken == null)
+            throw new ArgumentNullException(nameof(expiryDateToken), "Expiry date is required.");
+
+        // Generate New Token
+        var (jwtSecurityToken, newToken) = await GenerateJWTToken(user);
+
+
+        var refreshTokenResult = new RefreshToken()
+        {
+            UserName = user.UserName ?? "",
+            TokenString = refreshToken,
+            ExpireAt = (DateTime)expiryDateToken
+        };
+
+        var response = new JwtAuthResult()
+        {
+            AccessToken = newToken,
+            refreshToken = refreshTokenResult,
+        };
+        return response;
+    }
+
     #endregion
 
-    #region JWT Token Validation
+    #endregion
+
+    #region JWT Token (Read / Validation)
 
     #region 1). Read JWT Token
 
@@ -205,7 +260,48 @@ public class AuthenticationService : IAuthenticationService
 
     #endregion
 
-    #region 2). Validate Token Parameters
+    #region 2). Validate | Check JWT Token Details
+    public async Task<(string, DateTime?)> ValidateAndCheckJWTDetails(JwtSecurityToken jwtToken, string accessToken, string refreshToken)
+    {
+        if (jwtToken == null || !jwtToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256Signature))
+        {
+            return ("AlgorithmIsWrong", null);
+        }
+        if (jwtToken.ValidTo > DateTime.UtcNow)
+        {
+            return ("TokenIsNotExpired", null);
+        }
+
+        //Get User
+        var userIdClaim = jwtToken.Claims.FirstOrDefault(x => x.Type == nameof(UserClaimModel.Id));
+        if (userIdClaim == null)
+        {
+            return ("UserIdNotFound", null);
+        }
+        var userId = userIdClaim.Value;
+
+        var userRefreshToken = await _refreshTokenRepository.GetTableNoTracking()
+                                         .FirstOrDefaultAsync(x => x.Token == accessToken &&
+                                                                 x.RefreshToken == refreshToken &&
+                                                                 x.UserId == int.Parse(userId));
+        if (userRefreshToken == null)
+        {
+            return ("RefreshTokenIsNotFound", null);
+        }
+
+        if (userRefreshToken.ExpiryDate < DateTime.UtcNow)
+        {
+            userRefreshToken.IsRevoked = true;
+            userRefreshToken.IsUsed = false;
+            await _refreshTokenRepository.UpdateAsync(userRefreshToken);
+            return ("RefreshTokenIsExpired", null);
+        }
+        var expirydate = userRefreshToken.ExpiryDate;
+        return (userId, expirydate);
+    }
+    #endregion
+
+    #region 3). Validate Token Parameters
 
     public async Task<string> ValidateToken(string accessToken)
     {
@@ -235,41 +331,6 @@ public class AuthenticationService : IAuthenticationService
         {
             return ex.Message;
         }
-    }
-    #endregion
-
-    #region 3). Validate Details
-    public async Task<(string, DateTime?)> ValidateDetails(JwtSecurityToken jwtToken, string accessToken, string refreshToken)
-    {
-        if (jwtToken == null || !jwtToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256Signature))
-        {
-            return ("AlgorithmIsWrong", null);
-        }
-        if (jwtToken.ValidTo > DateTime.UtcNow)
-        {
-            return ("TokenIsNotExpired", null);
-        }
-
-        //Get User
-        var userId = jwtToken.Claims.FirstOrDefault(x => x.Type == nameof(UserClaimModel.Id)).Value;
-        var userRefreshToken = await _refreshTokenRepository.GetTableNoTracking()
-                                         .FirstOrDefaultAsync(x => x.Token == accessToken &&
-                                                                 x.RefreshToken == refreshToken &&
-                                                                 x.UserId == int.Parse(userId));
-        if (userRefreshToken == null)
-        {
-            return ("RefreshTokenIsNotFound", null);
-        }
-
-        if (userRefreshToken.ExpiryDate < DateTime.UtcNow)
-        {
-            userRefreshToken.IsRevoked = true;
-            userRefreshToken.IsUsed = false;
-            await _refreshTokenRepository.UpdateAsync(userRefreshToken);
-            return ("RefreshTokenIsExpired", null);
-        }
-        var expirydate = userRefreshToken.ExpiryDate;
-        return (userId, expirydate);
     }
     #endregion
 

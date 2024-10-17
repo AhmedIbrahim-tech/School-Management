@@ -1,24 +1,17 @@
-﻿using Azure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Core.Features.Authorization.Commands.Handlers;
+﻿namespace Core.Features.Authorization.Commands.Handlers;
 
 public class ClaimsCommandHandler : GenericBaseResponseHandler,
      IRequestHandler<UpdateUserClaimsCommand, GenericBaseResponse<string>>
 {
     #region Fileds
     private readonly IStringLocalizer<SharedResources> _stringLocalizer;
-    private readonly IAuthorizationService _authorizationService;
+    private readonly IAuthorizationServiceAsync _authorizationService;
 
     #endregion
 
     #region Constructors
     public ClaimsCommandHandler(IStringLocalizer<SharedResources> stringLocalizer,
-                                IAuthorizationService authorizationService) : base(stringLocalizer)
+                                IAuthorizationServiceAsync authorizationService) : base(stringLocalizer)
     {
         _authorizationService = authorizationService;
         _stringLocalizer = stringLocalizer;

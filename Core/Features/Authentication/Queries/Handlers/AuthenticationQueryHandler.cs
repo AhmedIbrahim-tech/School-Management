@@ -9,13 +9,13 @@ public class AuthenticationQueryHandler : GenericBaseResponseHandler,
 
     #region Fields
     private readonly IStringLocalizer<SharedResources> _stringLocalizer;
-    private readonly IAuthenticationService _authenticationService;
+    private readonly IAuthenticationServiceAsync _authenticationService;
 
     #endregion
 
     #region Constructors
     public AuthenticationQueryHandler(IStringLocalizer<SharedResources> stringLocalizer,
-                                        IAuthenticationService authenticationService) : base(stringLocalizer)
+                                        IAuthenticationServiceAsync authenticationService) : base(stringLocalizer)
     {
         _stringLocalizer = stringLocalizer;
         _authenticationService = authenticationService;

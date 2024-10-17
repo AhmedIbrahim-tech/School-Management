@@ -13,8 +13,8 @@ public static class ModuleServicesDependencies
         services.AddTransient<IStudentServices, StudentServices>();
         services.AddTransient<IDepartmentServices, DepartmentServices>();
         services.AddTransient<IApplicationUserService, ApplicationUserService>();
-        services.AddTransient<IAuthenticationService, AuthenticationService>();
-        services.AddTransient<IAuthorizationService, AuthorizationService>();
+        services.AddTransient<IAuthenticationServiceAsync, AuthenticationServiceAsync>();
+        services.AddTransient<IAuthorizationServiceAsync, AuthorizationServiceAsync>();
         services.AddTransient<IEmailsService, EmailsService>();
 
         services.AddTransient<ICurrentUserService, CurrentUserService>();

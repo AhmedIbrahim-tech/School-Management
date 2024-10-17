@@ -6,7 +6,24 @@ using System.Security.Claims;
 
 namespace Services.Services;
 
-public class AuthorizationService : IAuthorizationService
+#region Interface
+public interface IAuthorizationServiceAsync
+{
+    public Task<string> AddRoleAsync(string roleName);
+    public Task<bool> IsRoleExistByName(string roleName);
+    public Task<string> EditRoleAsync(EditRoleRequest request);
+    public Task<string> DeleteRoleAsync(int roleId);
+    public Task<bool> IsRoleExistById(int roleId);
+    public Task<List<Role>> GetRolesList();
+    public Task<Role> GetRoleById(int id);
+    public Task<ManageUserRolesResult> ManageUserRolesData(User user);
+    public Task<string> UpdateUserRoles(UpdateUserRolesRequest request);
+    public Task<ManageUserClaimsResult> ManageUserClaimData(User user);
+    public Task<string> UpdateUserClaims(UpdateUserClaimsRequest request);
+}
+
+#endregion
+public class AuthorizationServiceAsync : IAuthorizationServiceAsync
 {
     #region Fields
     private readonly RoleManager<Role> _roleManager;
@@ -15,7 +32,7 @@ public class AuthorizationService : IAuthorizationService
     #endregion
 
     #region Constructors
-    public AuthorizationService(RoleManager<Role> roleManager,
+    public AuthorizationServiceAsync(RoleManager<Role> roleManager,
                                 UserManager<User> userManager,
                                 ApplicationDBContext dbContext)
     {
@@ -47,33 +64,49 @@ public class AuthorizationService : IAuthorizationService
     #region Create Role
     public async Task<string> AddRoleAsync(string roleName)
     {
-        var identityRole = new Role();
-        identityRole.Name = roleName;
+        if (string.IsNullOrWhiteSpace(roleName))
+        {
+            return "Role name cannot be empty.";
+        }
+
+        var identityRole = new Role { Name = roleName };
         var result = await _roleManager.CreateAsync(identityRole);
-        if (result.Succeeded)
-            return "Success";
-        return "Failed";
+
+        return result.Succeeded ? "Success" : "Failed: " + string.Join(", ", result.Errors);
     }
+
     #endregion
 
     #region Edit Role
 
     public async Task<string> EditRoleAsync(EditRoleRequest request)
     {
-        //check role is exist or not
+        // Validate request
+        if (request == null || string.IsNullOrWhiteSpace(request.Name))
+        {
+            return "Invalid request. Role name cannot be empty.";
+        }
+
+        // Check if the role exists
         var role = await _roleManager.FindByIdAsync(request.Id.ToString());
         if (role == null)
-            return "notFound";
+        {
+            return "Role not found.";
+        }
 
-        // Update Role
+        // Update the role
         role.Name = request.Name;
         var result = await _roleManager.UpdateAsync(role);
-        if (result.Succeeded) return "Success";
 
-        // Return list of error if not Succeeded
-        var errors = string.Join("-", result.Errors);
-        return errors;
+        if (result.Succeeded)
+        {
+            return "Success";
+        }
+
+        // Return list of errors if update failed
+        return $"Failed to update role: {string.Join(", ", result.Errors)}";
     }
+
     #endregion
 
     #region Delete Role
@@ -86,15 +119,14 @@ public class AuthorizationService : IAuthorizationService
         var users = await _userManager.GetUsersInRoleAsync(role.Name);
 
         //return exception 
-        if (users != null && users.Count() > 0) return "Used";
+        if (users != null && users.Any()) return "Used";
 
         //delete
         var result = await _roleManager.DeleteAsync(role);
         //success
         if (result.Succeeded) return "Success";
         //problem
-        var errors = string.Join("-", result.Errors);
-        return errors;
+        return $"Failed to delete role: {string.Join(", ", result.Errors)}";
     }
 
     #endregion
