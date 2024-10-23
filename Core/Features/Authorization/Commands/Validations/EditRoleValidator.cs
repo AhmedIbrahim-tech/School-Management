@@ -5,6 +5,7 @@
         #region Fields
         private readonly IStringLocalizer<SharedResources> _stringLocalizer;
         #endregion
+
         #region Constructors
 
         #endregion

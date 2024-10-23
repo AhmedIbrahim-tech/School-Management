@@ -84,7 +84,7 @@ public class AuthenticationServiceAsync : IAuthenticationServiceAsync
         var roles = await _userManager.GetRolesAsync(user);
         var claims = new List<Claim>()
         {
-            new Claim(ClaimTypes.Name,user.UserName),
+            new Claim(ClaimTypes.Name,user.FullName),
             new Claim(ClaimTypes.NameIdentifier,user.UserName),
             new Claim(ClaimTypes.Email,user.Email),
             new Claim(nameof(UserClaimModel.PhoneNumber), user.PhoneNumber),

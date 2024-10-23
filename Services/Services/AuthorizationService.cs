@@ -1,5 +1,6 @@
 ﻿using Data.Helpers;
 using Infrastructure.Context;
+using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Identity;
 using Services.Interface;
 using System.Security.Claims;
@@ -29,16 +30,19 @@ public class AuthorizationServiceAsync : IAuthorizationServiceAsync
     private readonly RoleManager<Role> _roleManager;
     private readonly UserManager<User> _userManager;
     private readonly ApplicationDBContext _dbContext;
+    private readonly IUnitOfWork _unitOfWork;
     #endregion
 
     #region Constructors
     public AuthorizationServiceAsync(RoleManager<Role> roleManager,
                                 UserManager<User> userManager,
-                                ApplicationDBContext dbContext)
+                                ApplicationDBContext dbContext,
+                                IUnitOfWork unitOfWork)
     {
         _roleManager = roleManager;
         _userManager = userManager;
         _dbContext = dbContext;
+        _unitOfWork = unitOfWork;
     }
 
 
@@ -112,19 +116,22 @@ public class AuthorizationServiceAsync : IAuthorizationServiceAsync
     #region Delete Role
     public async Task<string> DeleteRoleAsync(int roleId)
     {
+        // Chech if this role exist or not
         var role = await _roleManager.FindByIdAsync(roleId.ToString());
         if (role == null) return "NotFound";
 
-        //Chech if user has this role or not
+        // Chech if user has this role or not
         var users = await _userManager.GetUsersInRoleAsync(role.Name);
 
-        //return exception 
+        // return exception 
         if (users != null && users.Any()) return "Used";
 
-        //delete
+        // delete this role
         var result = await _roleManager.DeleteAsync(role);
+
         //success
         if (result.Succeeded) return "Success";
+
         //problem
         return $"Failed to delete role: {string.Join(", ", result.Errors)}";
     }
@@ -135,62 +142,77 @@ public class AuthorizationServiceAsync : IAuthorizationServiceAsync
     #region Manage User Roles
     public async Task<ManageUserRolesResult> ManageUserRolesData(User user)
     {
-        var response = new ManageUserRolesResult();
-        var rolesList = new List<UserRoles>();
-        //Roles
+        var response = new ManageUserRolesResult
+        {
+            UserId = user.Id,
+            userRoles = new List<UserRoles>()
+        };
+
+       // Get all roles using the role service (SRP)
         var roles = await _roleManager.Roles.ToListAsync();
-        response.UserId = user.Id;
         foreach (var role in roles)
         {
-            var userrole = new UserRoles();
-            userrole.Id = role.Id;
-            userrole.Name = role.Name;
-            if (await _userManager.IsInRoleAsync(user, role.Name))
+            var hasRole = await _userManager.IsInRoleAsync(user, role.Name);
+
+            var userRole = new UserRoles
             {
-                userrole.HasRole = true;
-            }
-            else
-            {
-                userrole.HasRole = false;
-            }
-            rolesList.Add(userrole);
+                Id = role.Id,
+                Name = role.Name,
+                HasRole = hasRole
+            };
+
+            response.userRoles.Add(userRole);
         }
-        response.userRoles = rolesList;
+
         return response;
+
     }
     #endregion
 
     #region Update User Roles
     public async Task<string> UpdateUserRoles(UpdateUserRolesRequest request)
     {
-        var transact = await _dbContext.Database.BeginTransactionAsync();
+        await _unitOfWork.BeginTransactionAsync();
+
         try
         {
-            //Get User
+            // Get the user
             var user = await _userManager.FindByIdAsync(request.UserId.ToString());
             if (user == null)
             {
-                return "UserIsNull";
+                return "UserNotFound";
             }
-            //get user Old Roles
-            var userRoles = await _userManager.GetRolesAsync(user);
-            //Delete OldRoles
-            var removeResult = await _userManager.RemoveFromRolesAsync(user, userRoles);
-            if (!removeResult.Succeeded)
-                return "FailedToRemoveOldRoles";
-            var selectedRoles = request.userRoles.Where(x => x.HasRole == true).Select(x => x.Name);
 
-            //Add the Roles HasRole=True
-            var addRolesresult = await _userManager.AddToRolesAsync(user, selectedRoles);
-            if (!addRolesresult.Succeeded)
+            // Get user's current roles
+            var currentRoles = await _userManager.GetRolesAsync(user);
+
+            // Remove all existing roles
+            var removeRolesResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
+            if (!removeRolesResult.Succeeded)
+            {
+                await _unitOfWork.RollbackAsync();
+                return "FailedToRemoveOldRoles";
+            }
+
+            // Add new roles where HasRole = true
+            var newRoles = request.userRoles
+                .Where(x => x.HasRole)
+                .Select(x => x.Name);
+
+            var addRolesResult = await _userManager.AddToRolesAsync(user, newRoles);
+            if (!addRolesResult.Succeeded)
+            {
+                await _unitOfWork.RollbackAsync();
                 return "FailedToAddNewRoles";
-            await transact.CommitAsync();
-            //return Result
+            }
+
+            await _unitOfWork.CommitAsync();
             return "Success";
+
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            await transact.RollbackAsync();
+            await _unitOfWork.RollbackAsync();
             return "FailedToUpdateUserRoles";
         }
     }

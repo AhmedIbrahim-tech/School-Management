@@ -27,6 +27,7 @@ public class RoleQueryHandler : GenericBaseResponseHandler,
         _userManager = userManager;
     }
     #endregion
+
     #region Handle Functions
     
     #region Get List of Roles
